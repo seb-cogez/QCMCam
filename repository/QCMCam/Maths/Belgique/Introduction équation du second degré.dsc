@@ -1,0 +1,1 @@
+racines d'&eacute;quations du second degr&eacute; factorisables par les produits remarquables ou mise en &eacute;vidence.

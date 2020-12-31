@@ -1,0 +1,1 @@
+Lecture d'une abscisse d'un point sur une droite

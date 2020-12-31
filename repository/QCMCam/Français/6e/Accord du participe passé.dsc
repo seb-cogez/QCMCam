@@ -1,0 +1,1 @@
+R&eacute;visions sur l'accord du participe pass&eacute;, verbe &ecirc;tre + avoir plac&eacute; avant ou apr&egrave;s le CVD.

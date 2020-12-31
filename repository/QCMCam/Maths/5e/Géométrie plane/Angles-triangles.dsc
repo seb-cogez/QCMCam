@@ -1,0 +1,1 @@
+Somme des angles dans le triangle

@@ -1,0 +1,1 @@
+Diff&eacute;rentes &eacute;critures d'un nombre d&eacute;cimal

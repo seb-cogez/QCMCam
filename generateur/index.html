@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <script src="markers4x4.js" type="text/javascript"></script>
+        <title>Générateur de marqueur Aruko</title>
+        <style>
+            @media print
+            {
+                .noprint, .noprint *
+                {
+                    display: none !important;
+                }
+            }
+            *{
+              font-family: arial, sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 style="font-size:1.3em; text-align:center;" class="noprint"><img align="center" src="../css/img/QCMCam-logo.png" /> Générateur de marqueur Aruco 4×4</h1>
+        <div class="noprint">
+            Numéro du marqueur à générer : 
+            <input type="button" value="Générer marqueur n° :" onclick="genereMarker();">
+            <input type="number" min="1" max="60" step="1" name="valeur" id="mid" style="width:3em;" value="1">
+            <- de à -> <input type="number" min="2" max="60" step="1" name="valeurmax" id="maxid" style="width:3em;" value="2"><input type="button" value="Générer intervalle" onClick="generate();">
+            Couleur des lettres : <input type="color" onchange="setColor(this.value);" defaultValue='#E0E0E0' id="colorsetter"><br />
+            <i style="font-size: 0.8em;">Changer le 1er numéro et cliquer sur Générer marqueur n° pour créer un seul marqueur. Changer les 2 numéros et cliquer sur Générer intervalle pour créer tous les marqueurs du 1er au 2e nombre.</i>
+        </div>
+        <script>
+            var p4 = {106: 1, 107: 2, 110: 3, 111: 4, 122: 5, 123: 6, 126: 7, 127: 8, 154: 9, 155: 10, 158: 11, 159: 12, 166: 13, 167: 14, 169: 15, 142: 16, 171: 17, 173: 18, 174: 19, 175: 20, 182: 21, 183: 22, 185: 23, 186: 24, 187: 25, 189: 26, 190: 27, 191: 28, 218: 29, 219: 30, 222: 31, 223: 32, 230: 33, 231: 34, 233: 35, 234: 36, 235: 37, 237: 38, 238: 39, 239: 40, 246: 41, 247: 42, 249: 43, 250: 44, 251: 45,
+                254: 46, 43: 47, 46: 48, 47: 49, 58: 50, 59: 51, 62: 52, 91: 53, 94: 54, 102: 55, 103: 56, 105: 57, 109: 58, 118: 59, 121: 60,
+        42: 61, 63:62,90:63,95:64,119:65,125:66,138:67,139:68,217:69,143:70,150:71,151:72,153:73,157:74,162:75,163:76,165:77,168:78,172:79,178:80,179:81,181:82,184:83,188:84,202:85,203:86,206:87,207:88,214:89,215:90
+            };
+            var correspondances = {}, lettersColor = '#E0E0E0';
+            var eltColor = document.getElementById("colorsetter");
+            eltColor.value=lettersColor;
+            setColor = function(value){
+                lettersColor = value;
+            }
+            // inversion des correspondances.
+            for (let i in p4) {
+                correspondances[p4[i]] = i;
+            }
+            generate = function () {
+                var pngcont = document.getElementById("png-container");
+                while (pngcont.firstChild) {
+                    pngcont.removeChild(pngcont.firstChild);
+                }
+                for (let i in correspondances) {
+                    if(i>=Number(document.getElementById("mid").value) && i<=Number(document.getElementById("maxid").value))
+                        genereMarker(i, true);
+                }
+            };
+            function genereMarker(id, letsgo) {
+                if (id === undefined)
+                    id = Number(document.getElementById("mid").value);
+                if (Number(id) > 90 || Number(id) <= 0) {
+                    alert('Numéro non valide, il faut un nombre entre 1 et 90');
+                    return false;
+                }
+                var tid = correspondances[id];
+                var width = 600, height = 600;
+                [canvas, blancs] = makeMarker(tid, width, height);
+                var ctx = canvas.getContext('2d');
+                // style of the letters A, B, C and D
+                ctx.font = "bold 38px sans-serif";
+                ctx.fillStyle = lettersColor;
+                ctx.save();
+                var lettres = ["A", "B", "C", "D"];
+                for (let i = 0; i < 4; i++) {
+                    ctx.textAlign = "center";
+                    ctx.fillText(lettres[i], canvas.width / 2, 65);
+                    if (i === 0) {
+                        ctx.textAlign = "end";
+                        ctx.fillText(id, 670, 65);
+                    }
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate(Math.PI / 2);
+                    ctx.translate(-canvas.width / 2, -canvas.height / 2);
+                }
+                ctx.restore();
+                document.getElementById("markercanvas").innerHTML = canvas;
+                var img = document.createElement("IMG");
+                img.src = canvas.toDataURL("image/png");
+                var pngcont = document.getElementById("png-container");
+                if (letsgo !== undefined) {
+                    pngcont.appendChild(img);
+                    pngcont.innerHTML += '<DIV STYLE="page-break-before:always"></DIV>';
+                } else {
+                    while (pngcont.firstChild) {
+                        pngcont.removeChild(pngcont.firstChild);
+                    }
+                    pngcont.appendChild(img);
+                }
+            }
+
+        </script>
+        <div id="markercanvas" style="display: none;"></div>
+        <div id="png-container" style="margin:2em;" title="Clic droit copier pour coller dans un document."></div>
+    </body>
+</html>

@@ -1,0 +1,1 @@
+R&eacute;duire des expressions litt&eacute;rales simples

@@ -1,0 +1,1 @@
+16 questions sur les sym&eacute;tries centrales, axiales, rotations et translations. Eléments caract&eacute;ristiques, nature de la transformations, image par une transformation, 

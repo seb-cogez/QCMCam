@@ -1,0 +1,1 @@
+Cocher la r&eacute;ponse unique au symbole correspondant

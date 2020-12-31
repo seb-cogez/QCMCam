@@ -1,0 +1,1 @@
+L'objectif de ce QCM et des cr&eacute;er des groupes d'&eacute;l&egrave;ves par rapport &agrave; leur conception de la composition de l'atmosph&egrave;re primitive, dans l'objectif de constituer des groupes de travail o&ugrave; les &eacute;l&egrave;ves et des conceptions ou des id&eacute;es diff&eacute;rentes sur cette composition

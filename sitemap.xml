@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+    <loc>https://qcmcam.jeduque.net</loc>
+    <lastmod>2018-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+</url>
+<url>
+    <loc>https://mathsmentales.net/pourquoi-ca-marche-pas.html</loc>
+    <lastmod>2018-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+</url>
+<url>
+    <loc>https://mathsmentales.net/generateur/index.html</loc>
+    <lastmod>2018-11-07</lastmod>
+    <priority>0.1</priority>
+</url>
+</urlset>

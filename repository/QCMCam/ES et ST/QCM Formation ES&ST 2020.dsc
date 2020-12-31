@@ -1,0 +1,1 @@
+Tester les connaissances &agrave; la fin de la premi&egrave;re journ&eacute;e de formation.

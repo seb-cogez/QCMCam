@@ -1,0 +1,1 @@
+QCM de fin de cours pour v&eacute;rifier la bonne compr&eacute;hension de l'&eacute;l&egrave;ve. 

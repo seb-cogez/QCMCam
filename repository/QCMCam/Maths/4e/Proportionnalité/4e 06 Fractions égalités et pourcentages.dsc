@@ -1,0 +1,1 @@
+D&eacute;termination de fractions &eacute;gales, lien avec les pourcentages

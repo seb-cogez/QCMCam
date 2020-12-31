@@ -1,0 +1,1 @@
+Quelques suites arithm&eacute;tiques, g&eacute;om&eacute;triques ou quelconques &agrave; compl&eacute;ter

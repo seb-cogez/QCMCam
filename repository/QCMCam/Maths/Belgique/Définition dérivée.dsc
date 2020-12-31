@@ -1,0 +1,1 @@
+Lien entre d&eacute;riv&eacute;e, croissance et coefficient angulaire

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!--
+  QCMCam lecteur de marqueur déporté
+  Copyright 2019 Sébastien COGEZ Licence Apache 2.0
+-->
+<html>
+<head>
+  <title>Lecteur de Marqueur QCMCam déporté (smartphone ou tablette)</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="apple-touch-icon" sizes="72x72" href="img/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="img/apple-icon-144x144.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="img/favicon-96x96.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="QCMCam">
+  <meta name="apple-mobile-web-app-title" content="QCMCam">
+  <meta name="msapplication-starturl" content="index.html">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="img/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+  <link href="css/style-portable.min.css" rel="stylesheet" type="text/css" />
+  <script src="js/adapter.min.js"></script><!-- Ajoute les fonctionnalité de media sur les anciens navigateurs -->
+  <script src="js/polyfill.js"></script><!-- request animation frame sur les anciens navigateurs -->
+  <script src="js/aruco.min.js"></script>
+  <script src="js/cv.min.js"></script>
+  <script src="js/detector-dispositif.min.js?v=8"></script>
+  <script src="js/jsQR.min.js"></script>
+  <script src="js/peer.min.js" defer></script>
+  <script src="js/fullscreen.js" defer></script>
+  <script>
+    // This is the service worker with the Cache-first network
+    // A décommenter avant mise en prod
+    // Check compatibility for the browser we're running this in
+    /*if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('app/service_worker_main.js').then(function (registration) {
+        // Registration was successful
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }).catch(function (err) {
+        // registration failed :(
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    }*/
+  </script>
+  <!--<script src="app/service_worker_main.min.js"></script>-->
+</head>
+<body>
+  <div
+    style="position:absolute;z-index:100;top:0;left:0;right:0;height:100%;display: flex;justify-content: center; align-items: center;background: white;text-align: center;opacity: 1"
+    id="intro">
+    <div style="width:400px;display: block;">
+      <img src="img/QCMCam-logobig.png" alt="Logo QCMCam" /><br>Web App' de sondage<br>- lecture déportée -<br>
+      <img src="img/Ellipsis-2.6s-100px.gif" alt='chargement de la page' />
+    </div>
+  </div>
+  <div id="infobox"></div>
+  <div id="divVideo">
+    <video id="video" autoplay muted playsinline style="display:none;"></video>
+    <canvas id="surcouche" height="0"></canvas>
+  </div>
+  <div id="wrapper">
+    <div id="goodanswer">
+      <div id="btnA" onclick="q.setGood('A');">A</div>
+      <div id="btnB" onclick="q.setGood('B');">B</div>
+      <div id="btnC" onclick="q.setGood('C');">C</div>
+      <div id="btnD" onclick="q.setGood('D');">D</div>
+    </div>
+    <input id="btno" type="image" src="img/128px/expand.png" onclick="utils.pleinEcran();">
+    <input id="btnqr" type="image" src="img/128px/QRCode.png" onclick="camera.scanQR();">
+    <div id="affichage">
+      <div id="indication"></div>
+      <div id="numquestion" class="cache"></div>
+      <div id="listeeleves" class="cache"></div>
+    </div>
+    <div id="commandesInterroger" class="cache">
+      <div>
+        <img id="btni0" src="img/128px/if_user_error_66911.png" alt="Interroger qqun qui a répondu faux"
+          onclick="comm.interrogate('aleafalse', this);" />
+        <img id="btni1" src="img/128px/if_user_accept_66906.png" alt="Interroger qqun qui a répondu correctement"
+          onclick="comm.interrogate('aleatrue', this);" />
+        <img id="btni2" src="img/128px/if_user_info_66913.png" alt="Interroger n'importe qui ayant répondu"
+          onclick="comm.interrogate('alea', this);" />
+      </div>
+    </div>
+    <div id="commandes">
+      <div>
+        <img id="btn0" alt="Stats" src="img/128px/stats.png" onclick="comm.afficherStats();" />
+      </div>
+      <div>
+        <img id="btn1" alt="Réponse correcte" src="img/128px/if_bullet_accept_66697.png"
+          onclick="comm.indiqueReponse();" />
+      </div>
+      <div>
+        <img id="btn3" alt="Question suivante" src="img/128px/if_arrow_right_66681.png"
+          onclick="comm.questionSuivante();" />
+      </div>
+      <div>
+        <img id="btn2" alt="Stopper caméra" src="img/128px/photo.png" onclick="camera.stopStartScan();" />
+      </div>
+      <div>
+        <img id="bti" alt="Interroger quelqu'un" src="img/128px/if_user_search_66914.png"
+          onclick="affichage.debug('plouf');affichage.optionsInterroger();" />
+      </div>
+      <div id="divchangecam" class="cache">
+        <img id="btn4" alt="Changement de caméra" src="img/128px/gnome-session-switch.png"
+          onclick="camera.changeCamera();" />
+      </div>
+    </div>
+  </div>
+</body>
+</html>

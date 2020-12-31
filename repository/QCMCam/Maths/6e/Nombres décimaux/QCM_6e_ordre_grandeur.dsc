@@ -1,0 +1,1 @@
+Donner l'ordre de grandeur de l'op&eacute;ration.

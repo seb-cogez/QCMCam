@@ -1,0 +1,1 @@
+&Eacute;galit&eacute; de Pythagore et calculs

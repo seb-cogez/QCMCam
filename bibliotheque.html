@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+    <title>W3.CSS Template</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript">
+        window.onload = function () {
+            // création des liens pour le tri
+            var entetes = document.querySelectorAll("#tableau th");
+            for (let i = 0; i < entetes.length; i++) {
+                entetes[i].onclick = function () {
+                    sortTable(i);
+                };
+            }
+        };
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("tableau");
+            switching = true;
+            // Set the sorting direction to ascending:
+            dir = "asc";
+            /* Make a loop that will continue until
+             no switching has been done: */
+            while (switching) {
+                // Start by saying: no switching is done:
+                switching = false;
+                rows = table.getElementsByTagName("TR");
+                /* Loop through all table rows (except the
+                 first, which contains table headers): */
+                for (i = 1; i < (rows.length - 1); i++) {
+                    // Start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /* Get the two elements you want to compare,
+                     one from current row and one from the next: */
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    /* Check if the two rows should switch place,
+                     based on the direction, asc or desc: */
+                    if (dir === "asc") {
+                        if (n === 0) {
+                            if (Number(x.innerHTML) > Number(y.innerHTML)) {
+                                shouldSwitch = true;
+                                break;
+                            }
+                        } else
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            // If so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir === "desc") {
+                        if (n === 0) {
+                            if (Number(x.innerHTML) < Number(y.innerHTML)) {
+                                shouldSwitch = true;
+                                break;
+                            }
+                        } else
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            // If so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    /* If a switch has been marked, make the switch
+                     and mark that a switch has been done: */
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    // Each time a switch is done, increase this count by 1:
+                    switchcount++;
+                } else {
+                    /* If no switching has been done AND the direction is "asc",
+                     set the direction to "desc" and run the while loop again. */
+                    if (switchcount === 0 && dir === "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+        function ouvrir(url) {
+            if (window.opener) {
+                window.opener.QCMeditors.loadFile(encodeURI('ressources/Modeles_QCM/'+url));
+            }
+        }
+    </script>
+    <style>
+        .w3-sidebar a {font-family: "Roboto", sans-serif}
+        body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
+        #tableau span{
+            cursor: pointer;
+        }
+        header img{vertical-align: middle;}
+    </style>
+    <body class="w3-content" style="max-width:1200px">
+        <!-- Top menu on small screens -->
+        <header class="w3-bar w3-top w3-light-grey w3-xlarge">
+            <img src="css/img/QCMCam-logo.png" alt=""/> La bibliothèque de QCM (CTRL+F pour chercher dans la page)
+        </header>
+        <!-- !PAGE CONTENT! -->
+        <div class="w3-main">
+
+            <!-- Push down content on small screens -->
+            <div class="" style="margin-top:60px"></div>
+            <div>
+                <table id="tableau" class="w3-table-all w3-hoverable">
+                    <tr><th>Matière</th><th>Niveau</th><th>Titre</th><th>Court Descriptif</th><th>Lien</th></tr>
+                    <tr><td>Chimie</td><td>TS</td><td>pH et ions oxonium</td><td>6 questions adaptées du site <a href="http://qcmweb.fr">qcmweb.fr</a> avec l'accord de son auteur.</td><td><span onclick="ouvrir('QCMWeb/TS/TS Chimie pH et ions oxonium.txt');">lien</span></td></tr>
+                    <tr><td>Physique</td><td>TS</td><td>Les ondes sonores</td><td>14 questions adaptées du site <a href="http://qcmweb.fr">qcmweb.fr</a> avec l'accord de son auteur.</td><td><span onclick="ouvrir('QCMWeb/TS/TS Physique Les ondes sonores.txt');">lien</span></td></tr>
+                    <tr><td>Chimie</td><td>1eS</td><td>Quantités de matière</td><td>10 questions adaptées du site <a href="http://qcmweb.fr">qcmweb.fr</a> avec l'accord de son auteur.</td><td><span onclick="ouvrir('QCMWeb/1eS/1eS Chimie Quantité de matière.txt');">lien</span></td></tr>
+                    <tr><td>Physique</td><td>1eS</td><td>Relations de conjugaison d'une lentille</td><td>12 questions adaptées du site <a href="http://qcmweb.fr">qcmweb.fr</a> avec l'accord de son auteur.</td><td><span onclick="ouvrir('QCMWeb/1eS/1eS Physique Relations de conjugaison d\'une lentille.txt');">lien</span></td></tr>
+                    <tr><td>Chimie</td><td>2nde</td><td>Les ions</td><td>5 questions adaptées du site <a href="http://qcmweb.fr">qcmweb.fr</a> avec l'accord de son auteur.</td><td><span onclick="ouvrir('QCMWeb/2nde/2nde Chimie Les ions.txt');">lien</span></td></tr>
+                    <tr><td>Physique</td><td>2nde</td><td>Forces et principe d'inertie</td><td>12 questions adaptées du site <a href="http://qcmweb.fr">qcmweb.fr</a> avec l'accord de son auteur.</td><td><span onclick="ouvrir('QCMWeb/2nde/2nde Physique Forces et principe dinertie.txt');">lien</span></td></tr>
+                    <tr><td>Physique</td><td>2nde</td><td>Les lentilles convergentes</td><td>8 questions adaptées du site <a href="http://qcmweb.fr">qcmweb.fr</a> avec l'accord de son auteur.</td><td><span onclick="ouvrir('QCMWeb/2nde/2nde Physique lentilles convergentes.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>6e</td><td>Quadrilatères</td><td>Nature des quadrilatères par reconnaissance du codage des figures.</td><td><span onclick="ouvrir('QCM_6e_quadrilatères.txt')">lien</span></td></tr>
+                    <tr><td>Maths</td><td>6e</td><td>Polygones</td><td>Vocabulaire et polygones.</td><td><span onclick="ouvrir('QCM_6e_polygones.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>6e</td><td>Angles</td><td>Vocabulaire et notations des angles.</td><td><span onclick="ouvrir('QCM_6e_angles.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>6e</td><td>Aires périmètres</td><td>Calcul mental autour du calcul de périmètres et d'aires de quadrilatères.</td><td><span onclick="ouvrir('QCM_6e_aires_perimetres.txt')">lien</span></td></tr>
+                    <tr><td>Maths</td><td>6e</td><td>Bissectrice</td><td>Vocabulaire autour de la bissectrice.</td><td><span onclick="ouvrir('QCM_6e_bissectrice.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>6e</td><td>Arrondis</td><td>Arrondis de nombres décimaux.</td><td><span onclick="ouvrir('QCM_6e_arrondis.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>6e</td><td>Opérations</td><td>Vocabulaire des opérations.</td><td><span onclick="ouvrir('QCM_6e_vocab_operations.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>6e</td><td>Ordre de grandeur</td><td>Donner l'ordre de grandeur de l'opération.</td><td><span onclick="ouvrir('QCM_6e_ordre_grandeur.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>5e</td><td>Relatifs</td><td>Opérations avec des relatifs</td><td><span onclick="ouvrir('QCM_5e_opérations_sur_les_relatifs.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>4e</td><td>Fractions égales, pourcentages</td><td>Détermination de fractions égales, lien avec les pourcentages</td><td><span onclick="ouvrir('LioubaLeroux/4e 06 Fractions égalités et pourcentages.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>4e</td><td>Opérations avec fractions</td><td>Opérations variées sur les fractions. Permet de donner un peu de rythme à un exercice à faire en classe ou de corriger un exercice donné à la maison.</td><td><span onclick="ouvrir('QCM_4e_operation_fractions.txt')">lien</span></td></tr>
+                    <tr><td>Maths</td><td>4e</td><td>Puissances</td><td>Définition et calcul</td><td><span onclick="ouvrir('LioubaLeroux/4e 05 Puissances.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>4e</td><td>Priorités et espace</td><td>Vocabulaire des opérations et questions sur cylindre, pyramide et cône</td><td><span onclick="ouvrir('QCM_4e_priorite_espace.txt')">lien</span></td></tr>
+                    <tr><td>Maths</td><td>4e</td><td>Transformations</td><td>16 questions sur les symétries centrales, axiales, rotations et translations. Reconnaissance d'éléments caractéristiques, reconnaissance de nature de la transformations, image par une transformation, propriété des isométries</td><td><span onclick="ouvrir('QCM_4e_transformations.txt')">lien</span></td></tr>
+                    <tr><td>Maths</td><td>4e</td><td>Inverses</td><td>Questions sur les inverses de fractions</td><td><span onclick="ouvrir('QCM_4e_inverses_fractions.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>4e</td><td>Pythagore</td><td>Egalité de Pythagore et calculs</td><td><span onclick="ouvrir('LioubaLeroux/4e 04 Pythagore ss réciproque.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>4e</td><td>Espace 1</td><td>Questionnaire sur les solides</td><td><span onclick="ouvrir('QCM_4e_ Espace_1.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>4e</td><td>Espace 2</td><td>Questionnaire sur patrons de pyramides et cônes</td><td><span onclick="ouvrir('QCM_4e_ Espace_2.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>4e</td><td>Espace 3</td><td>Questionnaire sur les calculs de volumes</td><td><span onclick="ouvrir('QCM_4e_ Espace_3.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>4e</td><td>Espace 4</td><td>Questionnaire sur conversions d'aires et volumes</td><td><span onclick="ouvrir('QCM_4e_ Espace_4.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>3e</td><td>Arithmétique</td><td>Questionnaire progressif sur la division euclidienne, la décomposition en facteurs premiers et la somme de fractions</td><td><span onclick="ouvrir('QCM_3e_arithmétique.txt')">lien</span></td></tr>
+                    <tr><td>Maths</td><td>3e</td><td>Puissances, notation scientifique</td><td>Notation et décimaux, calcul et année lumière</td><td><span onclick="ouvrir('LioubaLeroux/3e 03 Puissances notation scientifique.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>3e</td><td>Puissances</td><td>Définition et calculs</td><td><span onclick="ouvrir('LioubaLeroux/3e 03 Puissances.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>3e</td><td>Priorités, statistiques</td><td>Questionnaire sur les prioriété opératoires et le vocabulaire des statistiques</td><td><span onclick="ouvrir('QCM_3e_priorité_statistiques.txt')">lien</span></td></tr>
+                    <tr><td>Maths</td><td>3e</td><td>Fonctions</td><td>Notion de Fonction</td><td><span onclick="ouvrir('LioubaLeroux/3e 04 Notion de fonctions.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>3e</td><td>Fonctions</td><td>Questionnaire sur les fonctions linéaires</td><td><span onclick="ouvrir('QCM_3e_fonction_linéaire.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>3e</td><td>Algo</td><td>Notion de boucle et de variable</td><td><span onclick="ouvrir('LioubaLeroux/Algo 01 boucle bloc variables.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>3e</td><td>Algo</td><td>Variable et test conditionnel</td><td><span onclick="ouvrir('LioubaLeroux/Algo 02 variables tests.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Fonctions</td><td>Révisions de seconde sur les fonctions.</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_1_Révisions de 2nde.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Equations</td><td>Révisions de seconde sur les équations.</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_2_Révisions de 2nde.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Suites</td><td>4 questions sur les suites.</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_3_Suites A.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Suites</td><td>4 questions sur les suites.</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_4_Suites B.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Equations</td><td>5 questions sur les équations du seconde degré.</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_5_Second degré A.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Equations</td><td>4 questions sur les équations du seconde degré.</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_5_Second degré B.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Mix</td><td>4 questions sur 2nd degré, suites et trigo</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_6_Second degré_suites_trigo.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Dérivation</td><td>4 questions sur la dérivation de fonctions du 2nd degré.</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_7_Second degré_dérivation.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Suites</td><td>5 questions sur les suites et la dérivation.</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_8_Suites-dérivation.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Suites</td><td>4 questions sur les suites et la dérivation.</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_9_Suites-dérivation.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Géométrie</td><td>6 questions sur les droites particulières du triangle et les vecteurs.</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_10_Droites du triangle et vect colin-orth.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Géométrie</td><td>5 questions sur les équations de droites et les positions relatives.</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_11_ vect colin-orth et position de droites.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Géométrie analytique</td><td>5 questions sur les équations de cercle et paraboles</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_12_ cercles_paraboles.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>1ère</td><td>Fonctions</td><td>5 questions sur la parité des fonctions.</td><td><span onclick="ouvrir('Mesnil Florence/QCMCam_14_ Parité des fonctions _graph.txt');">lien</span></td></tr>
+                    <tr><td>Français</td><td>CM1-CM2</td><td>lecture</td><td>Compréhension du texte Felix au CDI</td><td><span onclick="ouvrir('ThierryMarechal/Felix au CDI.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>CM1-CM2</td><td>Tables de multiplication</td><td>Table de 2</td><td><span onclick="ouvrir('ThierryMarechal/table de 2.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>CM1-CM2</td><td>Tables de multiplication</td><td>Table de 3</td><td><span onclick="ouvrir('ThierryMarechal/table de 3.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>CM1-CM2</td><td>Tables de multiplication</td><td>Table de 4</td><td><span onclick="ouvrir('ThierryMarechal/table de 4.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>CM1-CM2</td><td>Tables de multiplication</td><td>Table de 5</td><td><span onclick="ouvrir('ThierryMarechal/table de 5.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>CM1-CM2</td><td>Tables de multiplication</td><td>Table de 6</td><td><span onclick="ouvrir('ThierryMarechal/table de 6.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>CM1-CM2</td><td>Tables de multiplication</td><td>Table de 7</td><td><span onclick="ouvrir('ThierryMarechal/table de 7.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>CM1-CM2</td><td>Tables de multiplication</td><td>Table de 8</td><td><span onclick="ouvrir('ThierryMarechal/table de 8.txt');">lien</span></td></tr>
+                    <tr><td>Maths</td><td>CM1-CM2</td><td>Tables de multiplication</td><td>Table de 9</td><td><span onclick="ouvrir('ThierryMarechal/table de 9.txt');">lien</span></td></tr>
+                </table>
+            </div>
+
+
+            <!-- Subscribe section -->
+            <div class="w3-container w3-black w3-padding-32" style="display:none;">
+                <h1>Soumettre un QCM</h1>
+                <p>Proposez vos QCM pour qu'ils soient mis à disposition de tous</p>
+                <p><input class="w3-input w3-border" type="text" placeholder="Votre adresse e-mail" style="width:100%"></p>
+                <button type="button" class="w3-button w3-red w3-margin-bottom">Envoyer</button>
+            </div>
+            <!-- Footer -->
+            <footer class="w3-padding-64 w3-light-grey w3-small w3-center" id="footer">
+                <div class="w3-row-padding">
+                    <div class="w3-col s4">
+                        <h4>Contact</h4>
+                        <p>Une question, une remarque ?</p>
+                        <form action="message.php" target="_blank">
+                            <p><input class="w3-input w3-border" type="text" placeholder="Nom" name="Name" required></p>
+                            <p><input class="w3-input w3-border" type="text" placeholder="Email" name="Email" required></p>
+                            <p><input class="w3-input w3-border" type="text" placeholder="Sujet" name="Subject" required></p>
+                            <p><input class="w3-input w3-border" type="text" placeholder="Message" name="Message" required></p>
+                            <button type="submit" class="w3-button w3-block w3-black">Envoyer</button>
+                        </form>
+                    </div>
+
+                    <div class="w3-col s4">
+                        <h4>About</h4>
+                        <p><a href="http://qcmcam.net">QCMCam</a></p>
+                        <p><a href="http://cm.jeduque.net">Maths Mentales</a></p>
+                        <p><a href="http://cmi.jeduque.net">Maths Mentales online</a></p>
+                        <p><a href="http://www.cote66.fr">COTE66</a></p>
+                    </div>
+
+                    <div class="w3-col s4 w3-justify">
+                        <h4>Store</h4>
+                        <p><i class="fa fa-fw fa-map-marker"></i> S. COGEZ</p>
+                        <p><i class="fa fa-fw fa-phone"></i> --</p>
+                        <p><i class="fa fa-fw fa-envelope"></i> sebastien@cogez.fr</p>
+                    </div>
+                </div>
+            </footer>
+
+            <div class="w3-black w3-center w3-padding-24">Mise en page avec <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-opacity">w3.css</a></div>
+
+            <!-- End page content -->
+        </div>
+
+        <!-- Newsletter Modal -->
+        <div id="newsletter" class="w3-modal">
+            <div class="w3-modal-content w3-animate-zoom" style="padding:32px">
+                <div class="w3-container w3-white w3-center">
+                    <i onclick="document.getElementById('newsletter').style.display = 'none'" class="fa fa-remove w3-right w3-button w3-transparent w3-xxlarge"></i>
+                    <h2 class="w3-wide">NEWSLETTER</h2>
+                    <p>Rejoindre notre liste de diffusion pour être mis au courrant des mises à jour de la bibliothèque.</p>
+                    <p><input class="w3-input w3-border" type="text" placeholder="votre adresse mél"></p>
+                    <button type="button" class="w3-button w3-padding-large w3-red w3-margin-bottom" onclick="document.getElementById('newsletter').style.display = 'none'">Souscrire</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

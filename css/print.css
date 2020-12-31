@@ -1,0 +1,56 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 5 oct. 2016, 19:12:54
+    Author     : sebas
+*/
+div.question{
+    display:block;
+    border-bottom:1px solid black;
+}
+.clearfix {
+    clear:both;
+    border-top: 1px dotted blue;
+}
+.question ol {
+    counter-reset: li;
+}
+.question ol > li {
+    list-style-type: none;
+    margin-bottom: 16px;
+}
+.question ol > li::before {
+    counter-increment: li;
+    content: counter(li, upper-alpha) ". ";
+    padding: 4px;
+    margin-right: 3px;
+    cursor: pointer;
+    font-weight: bold;
+}
+ol.lialignes {
+    counter-reset: item;
+    padding: 0;
+}
+ol.lialignes > li {
+    float:left;
+    list-style-type: none;
+    margin-right: 1em;
+}
+ol.lialignes > li::before{
+    counter-increment: item;
+    display: inline-block;
+    width: 1em;
+    padding-right: 0.5em;
+    font-weight: bold;
+    text-align: right;
+    content: counter(item, decimal) ". ";
+}
+
+@media print {
+    .noprint {display:none !important;}
+    .nobreak {page-break-inside: avoid;}
+}
+@page {size:27.7cm 19cm;margin:1cm}

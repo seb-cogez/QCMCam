@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>QCMCam - Impression</title>
+    <link href="css/print.min.css" rel="stylesheet" type="text/css" />
+    <link href="js/katex/katex.min.css" rel="stylesheet" type="text/css" />
+    <script>
+        var contenu;
+        var AfficheReponses = function(how){
+          if(how === undefined) how = 'each';
+            var elt = document.getElementById("corps");
+            elt.innerHTML = "";
+            var insert,rinsert;var reponses = document.createElement("OL");
+            reponses.className = "lialignes";
+            for(var i in contenu){
+              insert = document.createElement("DIV");
+              insert.innerHTML = contenu[i].question;
+              insert.className = "question nobreak";
+              rinsert = document.createElement("DIV");
+              if(how === "each")
+                rinsert.innerHTML = "<b>Réponse : </b>"+((contenu[i].reponse)?contenu[i].reponse:"-");
+              else
+                rinsert.innerHTML = "";
+              rinsert.className = "clearfix";
+              insert.appendChild(rinsert);
+              elt.appendChild(insert);
+              insert = document.createElement("li");
+              if(contenu[i].reponse !== undefined)
+                  insert.innerHTML = contenu[i].reponse;
+              else
+                  insert.innerHTML = "-";
+              reponses.appendChild(insert);
+            }
+            insert = document.createElement("H3");
+            insert.innerHTML = "Réponses";
+            insert.className = "nobreak";
+            if(how === true){
+              elt.appendChild(insert);
+              elt.appendChild(reponses);
+            }
+            renderKatex();
+        };
+        var renderKatex = function(){
+          var elTex = document.querySelectorAll(".math-tex");
+          for(var i=0;i<elTex.length;i++){
+            var textTex = elTex[i].innerHTML;
+            try{
+                window.opener.katex.render(window.opener.utils.decodeHtmlEntity(textTex.replace("\\\(","").replace("\\\)","")), elTex[i],{
+                    throwOnError: false,
+                    errorColor: "#FFF"
+                });
+            } catch (err){
+                elTex[i].innerHTML = err+" erreur de rendu avec "+textTex;
+            }
+        }
+
+        };
+    </script>
+  </head>
+  <body>
+      <div class="noprint" title="non imprimé">
+      <input type="radio" onclick="AfficheReponses(false);" name="lieureponse">Sans réponse 
+      <input type="radio" onclick="AfficheReponses('each');" name="lieureponse" checked>Réponse après chaque question
+      <input type="radio" onclick="AfficheReponses(true);" name="lieureponse">Réponses à la fin du questionnaire
+    </div>
+    <h3 title="cliquer pour éditer" contenteditable="true">Liste des questions du QCM</h3>
+    <div id="corps">
+    </div>
+  </body>
+</html>

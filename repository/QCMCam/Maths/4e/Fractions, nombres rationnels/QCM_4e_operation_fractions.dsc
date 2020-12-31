@@ -1,0 +1,1 @@
+Op&eacute;rations vari&eacute;es sur les fractions. Permet de donner un peu de rythme &agrave; un exercice &agrave; faire en classe ou de corriger un exercice donn&eacute; &agrave; la maison.

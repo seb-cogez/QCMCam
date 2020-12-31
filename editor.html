@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>QCMCam : éditeur de QCM simple.</title>
+    <link href="css/styles-editeur.min.css" rel="stylesheet" type="text/css" defer />
+    <script type="text/javascript" src="js/ckeditor/ckeditor.js" defer></script>
+    <script src="js/fullscreen.js" type="text/javascript" defer></script>
+    <script src="js/katex/katex.min.js" type="text/javascript" defer></script>
+    <script src="js/download.min.js" defer></script>
+    <script src="js/editors.min.js" type="text/javascript" defer></script>
+    <link href="js/katex/katex.min.css" rel="stylesheet" type="text/css" defer />
+    <body>
+    <div style="position:absolute;z-index:100;top:0;left:0;right:0;height:100%;display: flex;justify-content: center; align-items: center;background: white;text-align: center;opacity: 1" id="intro">
+        <div style="width:400px;display: inline-block;margin-top:-100px;">
+          <img src="css/img/QCMCam-logobig.png" alt="Logo QCMCam" /><br>Web App' de sondage<br>
+          <img src="css/img/Ellipsis-2.6s-100px.gif" alt='chargement de la page' /><br>
+          <a href="pourquoi-ca-marche-pas.html" style='color:lightgrey;'>La page reste bloquée ?</a>
+        </div>
+    </div>
+<div id="commandesQuestions">
+            <img id="btnadd" src="css/img/32px/if_bullet_add_66698.png" title="Ajouter une question (ALT X)" alt="ajouter question" onclick="QCMeditors.addQ();" data-translate='{"title":"questions.addquestion"}' />
+            <input type='file' id="file" accept='text/plain' onchange='QCMeditors.openFile(event)' title="Charger les questions depuis son ordinateur" class="inputfile" data-translate='{"title":"questions.loadquestions"}' />
+            <label for="file" title="Charger les questions depuis son ordinateur" data-translate='{"title":"questions.loadquestions"}'><img onmouseover="utils.montrerPasteUrl(true);" src="css/img/32px/if_folder_upload_66809.png" title="Charger les questions depuis l'ordinateur" data-translate='{"title":"questions.loadquestions"}' /></label>
+            <div id="pasteUrl" onmouseout="utils.montrerPasteUrl(false);" class="cache"><span data-translate="{'html':'questions.pasteurl'}">ou adresse web</span> :<input type="texte" id="inputurl" placeholder="Coller ici" data-translate="{'placeholder':'questions.pastehere'}"></div>
+            <img src="css/img/32px/if_folder_edit_66793.png" title="Afficher sans éditeur" onclick="utils.toggleOptions(this, 'editionQuestions');" id="btng" data-translate='{"title":"questions.togglequestionsptions"}' />
+            <img id="btnbib" src="css/img/32px/Library.png" onclick="utils.openLibrary();" title="Accéder à la bibliothèque de QCMCam" data-translate='{"title":"generalPanel.library"}' />
+            <img src="css/img/32px/document-revert.png" alt="Recharger le dernier questionnnaire" title="Recharger le dernier questionnaire utilisé" onclick="QCMeditors.loadLastQCM();" id="btnrq" class="cache" data-translate='{"title":"questions.loadlastquestions"}' />
+            <img src="css/img/32px/if_folder_download_66792.png" title="Télécharger les questions sur son ordinateur" alt="Télécharger questions" onclick="QCMeditors.download();" id="btnf" data-translate='{"title":"questions.downloadquestions"}' />
+          </div>
+      
+    <div id="contener">
+        <h3>Editeur de questionnaire spécial Liouba</h3>
+        <div id="editors">
+                <div id="editionQuestions0" class="editionQuestions">
+                    <span class="numero">1</span>
+                        <img src="css/img/32px/if_file_add_66760.png" alt="Insérer" title="Insérer avant cette question" onclick="QCMeditors.insertQ(0);" data-translate='{"title":"questions.insertbefore"}' />
+                        <img src="css/img/32px/document-import.png" alt="Déplacer à gauche" title="Déplacer la question vers la gauche" onclick="QCMeditors.moveQLeft(0);" data-translate='{"title":"questions.movetoleft"}' />
+                        <img src="css/img/32px/document-export.png" alt="Déplacer à droite" onclick="QCMeditors.moveQRight(0);" title="Déplacer la question vers la droite" data-translate='{"title":"questions.movetoright"}' />
+                        <img src="css/img/32px/if_file_deny_66762.png" alt="Supprimer" title="Supprimer la question" onclick="QCMeditors.supprQ(0);" data-translate='{"title":"questions.deletequestion"}' />
+                        <img src="css/img/32px/if_folder_deny_66791.png" alt="Tout supprimer" title="Supprimer toutes les questions" onclick="QCMeditors.supprAllQ();" data-translate='{"title":"questions.deleteallquestions"}' />
+                        <label for="temps0" title="Temps pour apporter sa réponse" data-translate='{"title":"questions.timetoanswer"}'>⏳</label><input type="time" value="00:00" min="00:00" step="60" id="temps0" name="temps0" title="Temps pour apporter sa réponse" data-translate='{"title":"questions.timetoanswer"}' onchange="utils.showSablier(this.value, 0);" />
+                        Type :
+                        <input type="image" id='btncc0' onclick="QCMeditors.changeTypeChoice(0);" title="Commuter réponse simple/réponse multiple" data-translate='{"title":"questions.changetypechoice"}' src="css/img/32px/onechoice.png" width="32" height="32" style="vertical-align: middle" />
+                        <span data-translate='{"html":"questions.thegoodanswer"}'>Bonne réponse</span> : <span id="btnchck0"><input type='radio' name='reponse' value="A" id='RA0' onclick="answers.setAnswer(this.value,this.type,0);" />A<input type='radio' id='RB0' name='reponse' value="B" onclick="answers.setAnswer(this.value,this.type,0);" />B
+                        <input type='radio' id='RC0' name='reponse' value="C" onclick="answers.setAnswer(this.value,this.type,0);" />C<input type='radio' id='RD0' name='reponse' value="D" onclick="answers.setAnswer(this.value,this.type,0);" />D</span>
+                        <input type='radio' id='R00' name='reponse' title="pas de réponse" value="0" onclick="answers.setAnswer(this.value,this.type,0);" />Ø
+                    </div>          
+            <div id="editor0" class="question" contenteditable="true">
+                    <h3 data-translate='{"html":"questions.defaultquestion"}'>Première question :</h3>
+                    <ol>
+                      <li>&nbsp;</li>
+                      <li>&nbsp;</li>
+                      <li>&nbsp;</li>
+                      <li>&nbsp;</li>
+                    </ol>
+            </div>
+    </div>
+    </div>
+    <div id="lastcontents" class="cache">
+            <div class="right" onclick="utils.class('lastcontents', 'cache')">×</div>
+            <div id="lc-content">
+            </div>
+          </div>
+    </body>
+</html>

@@ -1,0 +1,1 @@
+Nature des quadrilat&egrave;res par reconnaissance du codage des figures.

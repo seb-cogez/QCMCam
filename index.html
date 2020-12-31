@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>QCMCam : QCM et sondages avec une webcam ou un smartphone.</title>
+<meta name="description" content="QCMCam est une webapplication libre et gratuite qui permet de proposer des sondages et QCM grâce à une caméra et des cartons imprimés, en ligne, ou hors ligne.">
+<meta name="keywords" content="QCMCam, QCM, vote, 4 réponses, caméra, smartphone, webcam, tablette, sondage, visualisation, résultats, rapide, questionnaire à choix multiple, A B C D, LaTeX, image, photo, bibliothèque, tutoriel">
+<link rel="apple-touch-icon" sizes="72x72" href="apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="144x144" href="apple-icon-144x144.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="preload" href="js/katex/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="js/katex/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link href="css/styles.min.css?v=7" rel="stylesheet" type="text/css" />
+<script>
+  var usePeerJs = false;
+</script>
+<script src="js/adapter.min.js" defer></script>
+<script src="js/polyfill.js" defer></script>
+<script src="js/aruco.min.js" defer></script>
+<script src="js/cv.min.js" defer></script>
+<script src="js/download.min.js" defer></script>
+<script src="js/ckeditor/ckeditor.js" defer></script>
+<script src="js/fullscreen.js" defer></script>
+<script src="js/intro.min.js" defer></script>
+<script src="js/katex/katex.min.js?v=0.11.1" defer></script>
+<script src="js/detector-aruco.min.js?v=23" defer></script>
+<script src="js/qrious-master/dist/qrious.min.js" defer></script>
+<script src="js/peer.min.js" defer></script>
+<script src="js/lang/fr.min.js" defer></script>
+<script src="js/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js" defer></script>
+<body>
+  <noscript id="deferred-styles">
+    <link href="css/introjs.min.css" rel="stylesheet" type="text/css" defer />
+    <link href="js/katex/katex.min.css?v=0.11" rel="stylesheet" type="text/css" defer />
+    <link href="js/ckeditor/plugins/codesnippet/lib/highlight/styles/ir_black.css" rel="stylesheet">
+  </noscript>
+  <div style="position:absolute;z-index:100;top:0;left:0;right:0;height:100%;display: flex;justify-content: center; align-items: center;background: white;text-align: center;opacity: 1" id="intro">
+    <div style="width:400px;display: inline-block;margin-top:-100px;">
+      <img src="css/img/QCMCam-logobig.png" alt="Logo QCMCam" /><br>Web App' de sondage<br>
+      <img src="css/img/Ellipsis-2.6s-100px.gif" alt='chargement de la page' /><br>
+      <a href="pourquoi-ca-marche-pas.html" style='color:lightgrey;'>La page reste bloquée ?</a>
+    </div>
+  </div>
+  <div id="contenerApp">
+    <img id="qrious" class="cache" width="200" height="200" style="position:absolute;right:10px;top:10px;z-index:100;">
+    <div id="lienqr" style="position:absolute;left:10px;top:10px;"></div>
+    <!-- mettre display:none à la vidéo empêche la vidéo de tourner dans chrome, d'où les réglages ci-dessous-->
+    <video id="video" autoplay muted playsinline style="width:0;height:0;position:absolute;top:0;left:0;"></video>
+    <div id="divVideo">
+      <div id="cameras-list" class="cache" data-translate='{"html":"messages.cameralist"}'>Liste des caméras détectées</div>
+      <canvas id="surcouche" height="0"></canvas>
+    </div>
+    <div id="menuhaut">
+    <div id="logo">
+        <img src="css/img/QCMCam-logo.png" title="QCMCam, scanner de QCM avec une webcam" alt="QCMCam logo" onclick="utils.afficheAccueil();" data-translate='{"title":"generalPanel.logo"}' />
+    </div>
+    <div id="commandesQuestions">
+      <img id="btnadd" src="css/img/32px/if_bullet_add_66698.png" title="Ajouter une question (ALT X)" alt="ajouter question" onclick="QCMeditors.addQ();" data-translate='{"title":"questions.addquestion"}' />
+      <input type='file' id="file" accept='text/plain' onchange='QCMeditors.openFile(event)' title="Charger les questions depuis son ordinateur" class="inputfile" data-translate='{"title":"questions.loadquestions"}' />
+      <label for="file" title="Charger les questions depuis son ordinateur" data-translate='{"title":"questions.loadquestions"}'><img onmouseover="utils.montrerPasteUrl(true);" src="css/img/32px/if_folder_upload_66809.png" title="Charger les questions depuis l'ordinateur" data-translate='{"title":"questions.loadquestions"}' /></label>
+      <div id="pasteUrl" onmouseout="utils.montrerPasteUrl(false);" class="cache"><span data-translate='{"html":"questions.pasteurl"}'>ou adresse web</span> :<input type="texte" id="inputurl" placeholder="Coller ici" data-translate='{"placeholder":"questions.pastehere"}'></div>
+      <img src="css/img/32px/if_folder_edit_66793.png" title="Plus d'options - ne pas utiliser si des évaluations ont été faites" onclick="utils.toggleOptions('editionQuestions');" id="btng" data-translate='{"title":"questions.togglequestionsptions"}' />
+      <img id="btnbib" src="css/img/32px/Library.png" onclick="utils.openLibrary();" title="Accéder à la bibliothèque de QCMCam" data-translate='{"title":"generalPanel.library"}' />
+      <img src="css/img/32px/document-revert.png" alt="Recharger le dernier questionnnaire" title="Recharger le dernier questionnaire utilisé" onclick="QCMeditors.loadLastQCM();" id="btnrq" class="cache" data-translate='{"title":"questions.loadlastquestions"}' />
+    </div>
+    <div id="panneauHautDroite">
+    <div id="commandesPrincipalesUsers">
+        <select name="classe" id="classes" onchange="users.setGroup(this.value);">
+            <option value="nochoice" selected data-translate='{"html":"generalPanel.group"}'>Groupe</option>
+          </select>
+          <input type='file' id="file2" accept='text/plain' onchange='users.openFile(event)' title="Charger les participants depuis son ordinateur" class="inputfile" data-translate='{"title":"generalPanel.usersload"}' />
+          <label for="file2" title="Charger les participants depuis l'ordinateur"><img src="css/img/32px/if_user_upload_66919.png" title="Charger les participants depuis l'ordinateur" data-translate='{"title":"generalPanel.usersload"}' /></label>
+          <img id="btnop" src="css/img/32px/if_file_edit_66764.png" title="Editer la liste des participants" onclick="utils.toggleOptions('editionParticipants');" data-translate='{"title":"generalPanel.userstoggleedit"}' />
+    </div>
+    <div id="commandesCamera">
+      <img id="btnkey" src="css/img/32px/camera-web.png" onmouseover="utils.setterFullHD(true);" title="Démarrer/arrêter la caméra" onClick="camera.start();" data-translate='{"title":"generalPanel.startstop"}' />
+      <div id="setterFullHD" onmouseout="utils.setterFullHD(false);" onclick="camera.resol=1920;camera.start();" class="cache" data-translate='{"title":"generalPanel.setFullHD"}' title="Démarre la caméra en Full HD (si compatible)">Full HD</div>
+      <img id="btnchangecamera" class="cache" src="css/img/32px/gnome-session-switch.png" title="Changer de caméra (plusieurs caméras détectées)" onClick="camera.change();" data-translate='{"title":"generalPanel.changecam"}' />
+      <img id="btnportable" src="css/img/32px/phone.png" title="Démarrer le scan avec un smartphone ou une tablette (utiliser Firefox sur l'appareil)" onclick="comm.loadSession();" data-translate='{"title":"generalPanel.smartphone"}' />
+      <img id="btnstopportable" src="css/img/32px/phonestop.png" title="Arrêter de scanner avec le smartphone" onclick="comm.stopSession();" class="cache" data-translate='{"title":"generalPanel.stopsmartphone"}' />
+      <img id="btnfscr" src="css/img/32px/view-fullscreen.png" onclick="utils.pleinEcran();" title="Plein écran (ALT+Z)" data-translate='{"title":"generalPanel.fullscreen"}' />
+    </div>
+  </div>
+  </div>
+  <div id="commandes">
+        <div id="editionQuestions" class="cache">
+          <img id="btnadd" src="css/img/32px/if_bullet_add_66698.png" title="Ajouter une question (ALT X)" alt="ajouter question" onclick="QCMeditors.addQ();" data-translate='{"title":"questions.addquestion"}' />
+          <img src="css/img/32px/if_file_add_66760.png" alt="Insérer" title="Insérer avant cette question" onclick="QCMeditors.insertQ();" data-translate='{"title":"questions.insertbefore"}' />
+          <img src="css/img/32px/document-import.png" alt="Déplacer à gauche" title="Déplacer la question vers la gauche" onclick="QCMeditors.moveQLeft();" data-translate='{"title":"questions.movetoleft"}' />
+          <img src="css/img/32px/document-export.png" alt="Déplacer à droite" onclick="QCMeditors.moveQRight();" title="Déplacer la question vers la droite" data-translate='{"title":"questions.movetoright"}' />
+          <img src="css/img/32px/if_file_deny_66762.png" alt="Supprimer" title="Supprimer la question" onclick="QCMeditors.supprQ();" data-translate='{"title":"questions.deletequestion"}' />
+          <img src="css/img/32px/if_folder_deny_66791.png" alt="Tout supprimer" title="Supprimer toutes les questions" onclick="QCMeditors.supprAllQ();" data-translate='{"title":"questions.deleteallquestions"}' />
+          <img src="css/img/32px/if_folder_download_66792.png" title="Télécharger les questions sur son ordinateur" alt="Télécharger questions" onclick="QCMeditors.download();" id="btnf" data-translate='{"title":"questions.downloadquestions"}' />
+          <label for="temps" title="Temps pour apporter sa réponse" data-translate='{"title":"questions.timetoanswer"}'>⏳</label><input type="time" value="00:00" min="00:00" step="60" id="temps" name="temps" title="Temps pour apporter sa réponse" data-translate='{"title":"questions.timetoanswer"}' onchange="utils.showSablier(this.value);" />
+          <br>
+          Type :
+          <input type="image" id='btncc' onclick="QCMeditors.changeTypeChoice();" title="Commuter réponse simple/réponse multiple" data-translate='{"title":"questions.changetypechoice"}' src="css/img/32px/onechoice.png" width="32" height="32" style="vertical-align: middle" />
+          <span data-translate='{"html":"questions.thegoodanswer"}'>Bonne réponse</span> : <span id="btnchck"><input type='radio' name='reponse' value="A" id='RA' onclick="answers.setAnswer(this.value,this.type);" />A<input type='radio' id='RB' name='reponse' value="B" onclick="answers.setAnswer(this.value,this.type);" />B
+          <input type='radio' id='RC' name='reponse' value="C" onclick="answers.setAnswer(this.value,this.type);" />C<input type='radio' id='RD' name='reponse' value="D" onclick="answers.setAnswer(this.value,this.type);" />D</span>
+          <input type='radio' id='R0' name='reponse' title="pas de réponse" value="0" onclick="answers.setAnswer(this.value,this.type);" />Ø
+        </div>
+        <div id="navigation">
+            <img src="css/img/32px/if_arrow_left_courte.png" alt="première question" title="Aller à la première question" class="inactiv" onclick="QCMeditors.firstQ();" id="buttonFirst" data-translate='{"title":"navigationPanel.firstquestion"}' /><img src="css/img/32px/if_arrow_left_66678.png" title="Question précédente"
+              alt="précédente" class="inactiv" onclick="QCMeditors.prevQ();" id="buttonLeft" data-translate='{"title":"navigationPanel.prevquestion"}' /> <span id="numquestion">1/1</span>
+            <img src="css/img/32px/if_arrow_right_66681.png" title="Question suivante (ALT+G)" alt="suivante" class="inactiv" onclick="QCMeditors.nextQ();" id="buttonRight" data-translate='{"title":"navigationPanel.nextquestion"}' /><img src="css/img/32px/if_arrow_right_courte.png" alt="première question" title="Aller à la dernière question"
+              class="inactiv" onclick="QCMeditors.lastQ();" id="buttonLast" data-translate='{"title":"navigationPanel.lastquestion"}' />
+              <img src="css/img/32px/cacheQCM.png" alt="Cacher la question" title="Cacher la question" onclick="QCMeditors.toggleCacheQuestions();" id="btncq" data-translate='{"title":"questions.hidequestion"}' />
+              <span id="commandeslive">
+              <img id="btna" src="css/img/32px/scan-marker.png" onclick="camera.scanner();" title="Scanner les réponses (ALT+C)" data-translate='{"title":"navigationPanel.startscan"}' />
+            <select name="goodAnswer" id="goodAnswer" onChange="answers.setGoodAnswer(this.value);">
+              <option value="0" data-translate='{"html":"navigationPanel.correctanswer"}'>Réponse ✅</option>
+              <option value="A" data-translate='{"html":"navigationPanel.answerA"}'>Réponse A</option>
+              <option value="B" data-translate='{"html":"navigationPanel.answerB"}'>Réponse B</option>
+              <option value="C" data-translate='{"html":"navigationPanel.answerC"}'>Réponse C</option>
+              <option value="D" data-translate='{"html":"navigationPanel.answerD"}'>Réponse D</option>
+            </select>
+            <img src="css/img/32px/if_bullet_accept_66697.png" id="revealanswer" class="cache" title="Affiche la bonne réponse à la question (quand enregistrée)" onclick="answers.giveGoodAnswer();" data-translate='{"title":"navigationPanel.showcorrectanswer"}' />
+            <img id="btnb" src="css/img/32px/stats.png" onclick="users.afficheReponses();" title="Voir les statistiques de réponses (ALT+V)" data-translate='{"title":"navigationPanel.showstats"}' />
+            <img id="btnstats" src="css/img/32px/manview.png" title="Tableau général des réponses" onclick="answers.afficherStats();" data-translate='{"title":"navigationPanel.tableofanswers"}' />
+            <img id="btnc" src="css/img/32px/old-view-refresh.png" onclick="answers.initAll(false);" title="Remettre les réponses à zéro (ALT+R)" data-translate='{"title":"navigationPanel.answersreset"}' />
+          </span>
+        </div>
+        <div id="editionParticipants" class="cache">
+            <img src="css/img/32px/if_file_66786.png" title="Vider la liste des participants" onclick="users.emtpy();" data-translate='{"title":"generalPanel.usersempty"}' />
+            <img src="css/img/32px/if_user_add_66907.png" title="Ajouter des participants" onclick="users.add();" data-translate='{"title":"generalPanel.usersadd"}' />
+            <img src="css/img/32px/if_user_deny_66909.png" title="Supprimer des participants" onclick="users.setDeleteMode();" data-translate='{"title":"generalPanel.usersdelete"}' />
+            <img id="btnednames" src="css/img/32px/if_user_edit_66910.png" title="Editer les noms et numéros des participants" onClick="users.edit();" data-translate='{"title":"generalPanel.usersedit"}' />
+            <img id="btndownnames" src="css/img/32px/if_user_download_66919.png" title="Télécharger les participants affichés sur l'ordinateur" onclick="users.download();" data-translate='{"title":"generalPanel.usersdownload"}' />
+            <input id="importliste" size="5" type="text" title="Coller ici vos listes depuis votre tableur" onfocus="this.value='';" onblur="this.value='';" placeholder="Coller ici"  data-translate='{"title":"generalPanel.userspaste", "placeholder":"generalPanel.pastehere"}'>
+            <img id="btndowngroups" src="css/img/32px/if_file_download_66763.png" title="Télécharger les groupes sur votre ordinateur" onclick="users.groupsDownload();" data-translate='{"title":"generalPanel.groupsdownload"}' />
+            <img id="btnresetclasses" src="css/img/32px/if_user_restore.png" alt="Restauration des listes" title="Restaurer les listes GP1 et GP2" onclick="users.resetCollege();" class="cache" data-translate='{"title":"generalPanel.restoredefault"}' />
+            <img id="btnsaveclasses" src="css/img/32px/document-save.png" alt="Enregistrer la liste de groupes" title="Enregistrer la liste de groupes" onclick="users.savelist();" class="cache" data-translate='{"title":"generalPanel.userssavelists"}' />
+        </div>      
+  </div>
+  <div style="position:absolute;top:6em;left:50%;transform:translateX(-50%);"><span style="font-size: 0.8em;">A</span><input class="valin" type="range" name="points" value="1" min="0.6" max="2.4" step="0.2" style="width:50px;" oninput="utils.affichageStyle(this.value);"><span style="font-size: 1.5em;">A</span></div>
+    <div id="zonesAffichage">
+      <div id="questions" class="inline-block">
+        <div id="cacheQuestions" class="cache" onclick="QCMeditors.toggleCacheQuestions();">
+          <div style="text-align: center;width:100%;">
+            <img src="css/img/tick.png" alt="" title="cliquer ici quand vous êtes prêt" data-translate='{"title":"questions.clickwhenready"}' /><br>
+            <span data-translate='{"html":"questions.firstquestion"}'>Cliquer ici quand vous êtes prêt</span>
+          </div>
+        </div>
+        <div id="sablier" class="cache"><div id="chronorect">⏳</div><span id="decompte"></span></div>
+        <div id="questionsContener">
+            <div id="animate">
+            <div id="editor0" class="question" contenteditable="true">
+              <h3 data-translate='{"html":"questions.defaultquestion"}'>Première question :</h3>
+              <ol>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:right;color:grey;font-size:small"><span data-translate='{"html":"questions.bottommessage"}'>cliquer-glisser pour modifier la taille</span> &nbsp; &nbsp;</div>
+      </div>
+      <div id="conteneureleves">
+        <div id="boutonsuserslive" class="cache">
+        <img id="btnaleafalse" src="css/img/32px/if_user_error_66911.png" title="Interroger un participant ayant voté faux" onClick="users.alea(false);" data-translate='{"title":"usersPanel.interrogatewrong"}' />
+        <img id="btnaleatrue" src="css/img/32px/if_user_accept_66906.png" title="Interroger un participant ayant voté juste" onClick="users.alea(true);" data-translate='{"title":"usersPanel.interrogatetrue"}' />
+        <img id="btnalea" src="css/img/32px/user_info.png" title="Interroger un participant au hasard (ALT + K)" onClick="users.alea();" data-translate='{"title":"usersPanel.interrogaterandom"}' />
+        <img id="btnappel" src="css/img/32px/if_comment_edit_66707.png" onclick="users.appel();" title="Supprimer les utilisateurs qui n'ont pas répondu" data-translate='{"title":"usersPanel.deleteabsentees"}' />
+        <img id="btnnames" src="css/img/32px/if_user_delete_66908.png" onclick="users.toggle();" title="Cacher/Montrer les noms" data-translate='{"title":"usersPanel.toggleusersnames"}' />
+      </div>
+        <div id="messageedition" class="cache" data-translate='{"html":"usersPanel.userseditionmessage"}'>
+          Cliquer sur les numéros ou les Noms pour les modifier.<br />
+          Attention à ne pas laisser de <b>numéro en double</b> au moment de sortir du mode édition.
+        </div>
+        <div id="messageacceuil" class="flex">
+          <p><span class="QCMCam">QCM<span class="orange">Cam</span></span>, <span data-translate='{"html":"startPanel.startdescription"}'>la web'app pour <b>sonder</b> avec une <b>webcam</b> ou un smartphone</span>.
+            <br />Copyright 2019 Sébastien COGEZ <span data-translate='{"alt":"startPanel.licence"}'>licence <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></span>.</p>
+          <div style="clear:both;"></div>
+          <div class="c20" title="Comment démarrer ?" onclick="lancerDemo();" data-translate='{"title":"generalPanel.help"}'>
+            <img src="css/img/icones/help-contents.png" /><br />
+            <span data-translate='{"html":"startPanel.demo"}'>Démonstration</span>
+          </div>
+          <div class="c20" title="Information" onclick="utils.Infos('open');" data-translate='{"title":"startPanel.titleinfo"}'>
+            <img src="css/img/icones/if_bullet_info_66702.png" /><br />
+            <span data-translate='{"html":"startPanel.info"}'>Informations sur le site</span>
+          </div>
+          <div class="c20" title="Accéder à la chaine Youtube de QCMCam.net" data-translate='{"title":"startPanel.titleyoutube"}'>
+            <a href="https://www.youtube.com/playlist?list=PLY0c0egMElYOuip9op8_805Iwl7TtEVae" target="_blank" rel="noopener">
+            <img src="css/img/icones/avidemux.png" /><br />
+            <span data-translate='{"html":"startPanel.youtube"}'>Chaine Youtube</span></a>
+          </div>
+          <div class="c20" title="Télécharger les marqueurs" data-translate='{"title":"startPanel.titlemarkers"}'>
+            <a href="ressources/planche%20codes%20aruco%204x4%20A4.pdf" target="_blank">
+            <img src="css/img/icones/orange-document-open.png" /><br />
+            <span data-translate='{"html":"startPanel.markers"}'>Marqueurs au format A4</span></a>
+          </div>
+          <div class="c20" title="Télécharger la documentation" data-translate='{"title":"startPanel.titledocumentation"}'>
+            <a href="ressources/QCMCam documentation 1.2.pdf" target="_blank">
+            <img src="css/img/icones/accessories-dictionary.png" /><br />
+            <span data-translate='{"html":"startPanel.documentation"}'>PDF de la Documentation</span></a>
+          </div>
+          <div class="c20" title="Accéder au générateur de marqueur si vous avez perdu le vôtre." data-translate='{"title":"startPanel.titlegenerator"}'>
+            <a href="generateur/index.html">
+              <img src="css/img/icones/document-print.png" /><br />
+              <span data-translate='{"html":"startPanel.generator"}'>Générateur de marqueur</span>
+            </a>
+          </div>
+          <p><a href="ressources/RaspberryImageQRCodeScanner.zip"><img src="css/img/raspberrypi-home-link.svg" width="64" style="float:left;margin:10px;"/>
+            <span data-translate='{"html":"startPanel.raspberry"}'>Image pour Raspberry Pi</span></a> <span data-translate='{"html":"startPanel.raspberry2"}'>réalisée par Johannes Holstein</span> (DE)<br> 
+            md5 = 4064614f22b0fe8d0d1d34eb1b75a947<br>
+            <span data-translate='{"html":"startPanel.mailto"}'>Questions ou remarques</span> : <a href="mailto:contact@qcmcam.net?subject=Retour de test QCMCam&body=Bonjour,">contact@qcmcam.net</a>
+          </p>
+        </div>
+        <div id="listeeleves">
+        </div>
+      </div>
+      <canvas id="colonnes" width="200" height="480" style="margin:auto;vertical-align:top;background-color: white;margin-top:32px;" class="cache"></canvas>
+    </div>
+  </div>
+  <div class="cache" id="infos">
+    <img src="css/img/32px/close.png" style="float:right;cursor: pointer;" onclick="utils.Infos('close');" />
+    <div id="infostext" data-translate='{"html":"about.text"}'>
+    <p><img src="css/img/QCMCam-logo.png" title="QCMCam, scanner de QCM avec une webcam" alt="QCMCam logo" /> Logo, création et adaptations par <a href="mailto:sebastien.cogez@gmail.com">S. COGEZ</a> - collège OLIBO de St Cyprien.<br />
+      Copyright 2019 Sébastien COGEZ licence <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></p>
+    <p>Ce logiciel est développé de manière expérimentale. Il y a eu de nombreuses modifications depuis sa première mise en ligne en juin 2017. La dernière importante a été réalisée le 20/08/2018 où les marqueurs de base (4x4) servant à voter ont été
+      changés.
+      Il faudra donc les imprimer à nouveau pour ceux qui auraient d'anciens jeux. Ce changement est du à des problèmes de faux positifs lors des votes en classe. J'espère ne plus avoir à revenir là-dessus à l'avenir.<br />
+      Si vous voulez partager vos questionnaires via la bibliothèque, ou demander des améliorations du logiciel, merci de m'écrire.</p>
+    <p><img src="css/img/32px/info.png" alt="Informations complémentaires" />La lecture des QRVote se fait à l'aide d'une webcam ou d'un dispositif type smartphone/tablette.<br />Un tuto est directement accessible en cliquant sur l'icone "bouée de sauvetage".</p>
+    <p><img src="css/img/32px/disk7.png" alt="Ingénierie de gestion des fichiers" /> <a href="QCMCam.zip">Télécharger l'appli</a> pour un usage local ou pour modifier ce que vous voulez.</p>
+    <h4>R.G.P.D.</h4>
+    <ul>
+      <li>Aucune donnée n'est collectée sauf si vous me les envoyez par mail. Le seul cookie utilisé est celui nécessaire aux sessions avec un smartphone.</li>
+      <li>La plupart des opérations se faisant localement, le chargement des fichiers de question ou de participants est immédiat.</li>
+      <li>Vous pouvez copier/coller des images directement dans l'éditeur en ligne.</li>
+      <li>Les fichiers utilisés étant des fichiers texte, il est très facile de se les échanger...</li>
+      <li>Il est possible de charger un fichier de questions depuis le net en ajoutant ?url=lelienverslefichier.txt à la fin de l'adresse.</li>
+      <li>Pensez de votre côté à déclarer vos fichiers nominatifs à votre DPD (Délégué à la Protection des Données) pour être en règle par rapport au RGPD.</li>
+    </ul>
+    <h4>Remerciements</h4>
+    <ul>
+      <li>à <b>Claire Savinas</b> pour la première adaptation du plugin MathJax pour CKeditor à Katex de laquelle je ne me sortais pas. Depuis une mise à jour de Katex, j'ai complètement réécrit le plugin en repartant de zéro.</li>
+      <li>à <b>Arnaud Durand</b> (des problèmes dudu) du site <a href="https://mathix.org/linux/">mathix.org</a> pour ses aides au développement, et la pub qu'il a faite pour le site</li>
+      <li>à <b>Stéphane Guyon</b> pour ses <a href="https://twitter.com/mathsguyon/status/1052476020190838784">tweet</a> qui ont alerté Arnaud.</li>
+      <li>A <b>ma femme</b> qui n'a pas de réseau dans son collège et voulait une alternative à Plickers.</li>
+      <li>Aux collègues du cercle d'étude de ressources numériques pour les mathématiques de Montpellier qui ont participé à la bibliothèque.</li>
+      <li>A Thierry Maréchal, enseignant de CM à Ambleteuse pour ses questionnaires pour les CM.</li>
+      <li>...et à tous les utilisateurs qui me disent bonjour en passant.</li>
+    </ul>
+    <h4>Auteurs de la Bibliothèque</h4>
+    <ul>
+      <li>Certains exemples de la bibliothèque ont été réalisé par moi-même</li>
+      <li>Des QCM de Maths ont été fournis par Liouba Leroux, membre de Sesamath</li>
+      <li>QCM de physique et chimie en lycée  aimablement accordés par Laurent Crochet du site <a href="http://qcmweb.fr">qcmweb.fr</a></li>
+      <li>QCM d'histoire géo aimablement accordés par Olivier Fourrier et Catherine Lavie du site <a href="https://histographie.net">histographie.net</a></li>
+      <li>Thierry Maréchal, enseignant de CM à Ambleteuse.</li>
+      <li>Arnaud Gustin, INDSE (2-3D) à Bastogne (Belgique)</li>
+    </ul>
+    <h4>Traduction</h4>
+    <p>La traduction a été en grande partie réalisée à l'aide de <a href="deepl.com">Deepl translator</a>. Si vous voyez des erreurs, merci de me les signaler rapidement en fouillant dans le fichier de traduction vous correspondant :
+      <ul>
+        <li>Allemand <a href="js/lang/de.js">Fichier de.js</a></li>
+        <li>Anglais <a href="js/lang/en.js">Fichier en.js</a></li>
+        <li>Espagnol <a href="js/lang/es.js">Fichier es.js</a></li>
+        <li>Français <a href="js/lang/fr.js">Fichier fr.js</a> ce fichier, comme l'un des autres peut vous permettre de vous lancer dans la traduction dans une autre langue.</li>
+      </ul>
+      Liens directs à mettre dans les marque page : <a href="index.html?lang=es">Espagnol</a> | <a href="index.html?lang=en">Anglais</a> | <a href="index.html?lang=de">Allemand</a> | <a href="index.html?lang=fr">Français</a>
+    </p>
+    <p><img src="css/img/32px/film.png" alt="Tutos en ligne" /> <a href="https://www.youtube.com/playlist?list=PLY0c0egMElYOuip9op8_805Iwl7TtEVae" target="_blank" rel="noopener">Vidéos pour apprendre</a> à se servir de QCMCam</p>
+    <p><img src="css/img/32px/trombone.png" alt="Fichiers à imprimer" /> Les marqueurs sont à distribuer aux participants selon le numéro indiqué dans l'application.
+      Vous avez le choix entre :</p>
+    <ul>
+      <li><a href="ressources/QCMCam marqueurs 1_30 - A5 sur A4.pdf" target="_blank">marqueurs 1 à 30</a> 2 marqueurs par page A4.</li>
+      <li><a href="ressources/QCMCam marqueurs 31_60 - A5 sur A4.pdf" target="_blank">marqueurs 31 à 60</a> 2 marqueurs par page A4.</li>
+      <li><a href="ressources/QCMCam marqueurs 61_90 - A5 sur A4.pdf" target="_blank">marqueurs 61 à 90</a> 2 marqueurs par page A4.</li>
+      <li><a href="ressources/QCMCam marqueurs 1_30 - A4.pdf" target="_blank">marqueurs 1 à 30</a> format A4.</li>
+      <li><a href="ressources/QCMCam marqueurs 31_90 - A4.pdf" target="_blank">marqueurs 31 à 90</a> format A4.</li>
+      <li><a href="ressources/planche 37 codes aruco 3x3.pdf" target="_blank">37 marqueurs codés sur 3 bits</a> format A5 (recommandés pour les caméras à faible résolution).</li>
+      <li><a href="generateur/" target="_blank">Générateur de marqueur 4x4, pour les élèves qui perdraient le leur par exemple.</a></li>
+    </ul>
+    <p><img src="css/img/32px/options.png" alt="Changement de mode" /> Passer en <a href="#" onclick="utils.changeCode(5);">mode 5 bits</a> ou passer en <a href="#" onclick="utils.changeCode(4);">mode 4 bits</a> (config par défaut) ou en <a href="#" onclick="utils.changeCode(3);">mode
+        3 bits</a>.</p>
+    <p>Résolution de votre caméra en fullHD : <button onclick="camera.resol=1920;">full HD - 1920</button> <button onclick="camera.resol=1080;">HD - 1280</button></p>
+    <p>Editeur de texte en ligne : <a href="https://ckeditor.com/ckeditor-4/">CKEditor 4 inline</a> avec un plugin de formule KaTeX et un plugin d'upload de QCM créés par moi-même.</p>
+    <p><img src="css/img/32px/design.png" alt="icones dessinées par Aleksandra Wolska" /> Icons by <a href="http://www.softicons.com/system-icons/human-o2-grunge-icons-by-aleksandra-wolska">Aleksandra Wolska</a> and by <a href="https://www.iconfinder.com/iconsets/Hand_Drawn_Web_Icon_Set">Pawel
+        Kadysz</a>.</p>
+    <p><img src="css/img/Ellipsis-2.6s-100px.gif" alt='chargement de la page' height="32" width="32" /> Logo de chargement de l'application : <a href="https://loading.io/spinner/ellipsis">Ellipsis by loadding.io</a></p>
+    <p><img src="css/img/32px/photo.png" alt="Ingénierie reconnaissance" /> Reconnaissance des marqueurs avec <a href="https://github.com/jcmellado/js-aruco">JS Aruco</a> dérivé de <a href="https://www.uco.es/investiga/grupos/ava/node/26">Aruco</a>,
+      un système opensource créé par des chercheurs espagnols, utilisant lui-même le logiciel <a href="https://opencv.org/">opencv</a>.</p>
+    <p><img src="css/img/32px/disk7.png" alt="Ingénierie chargement et analyse des fichiers" /> <a href="http://danml.com/download.html">Librairie "download.js"</a> pour télécharger le fichier des questions.</p>
+    <p><img src="css/img/32px/help.png" alt="Ingénierie de démonstration des boutons" /><a href="https://introjs.com">Librairie "intro.js"</a> pour guider l'usage du site.</p>
+    <p><img src="css/img/32px/file.png" alt="Moteur de la bibliothèque" />La bibliothèque est adaptée du très joli et simple <a href="https://tutorialzine.com/2014/09/cute-file-browser-jquery-ajax-php">Cute File Browser</a> de <a href="Tutorialzine.com">Tutorialzine.com</a></p>
+  </div>
+  </div>
+  <div class="cache responsive" id="resultats">
+    <div id="commandesstats" style="float:right;cursor: pointer;"><img src="css/img/32px/close.png" title="Fermer" onclick="answers.afficherStats();" /> <img src="css/img/32px/disk7.png" title="Sauvegarder sur son disque dur" onclick="answers.telechargerStats();" data-translate='{"title":"statsPanel.download"}' /></div>
+    <table class="w3-hoverable w3-table-all" id="tableau">
+      <tr>
+        <th></th>
+      </tr>
+      <tr>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+  <div id="lastcontents" class="cache">
+    <div class="right" onclick="utils.class('lastcontents', 'cache')">×</div>
+    <div id="lc-content">
+    </div>
+  </div>
+  <div id="footersmartphone">
+    <div style="display: inline-block">
+      <img src="css/img/32px/phone.png" title="Logo smartphone" />
+    </div>
+    <div style="display: inline-block">
+      <span data-translate='{"html":"startPanel.smartphone"}'> Adresse pour le smartphone</span> : <a href="http://app.qcmcam.net">app.qcmcam.net</a><br />
+      <span data-translate='{"html":"startPanel.noneedqrscan"}' style="font-size: 0.8em;">Pas besoin de lecteur de QRCode, scanner depuis la page.</span>
+    </div>
+  </div>
+  <div id="espacelangue">
+    <input type="image" src="css/img/flags/flag-es.png" onclick="QCMCam.lang.changeLanguage('es');"/>
+    <input type="image" src="css/img/flags/flag-en.png" onclick="QCMCam.lang.changeLanguage('en');"/>
+    <input type="image" src="css/img/flags/flag-de.png" onclick="QCMCam.lang.changeLanguage('de');"/>
+    <input type="image" src="css/img/flags/flag-fr.png" onclick="QCMCam.lang.changeLanguage('fr');"/>
+    <input type='image' src="css/img/flags/flag-earth.png" title="Stripe Icons by Bnjamin De Cock" onclick="window.open('https://dribbble.com/shots/1089488-Stripe-Flag-Set?utm_source=Clipboard_Shot&utm_campaign=bdc&utm_content=Stripe%20Flag%20Set&utm_medium=Social_Share')" />
+  </div>
+</body>
+<script>
+  var loadDeferredStyles = function() {
+    var addStylesNode = document.getElementById("deferred-styles");
+    var replacement = document.createElement("div");
+    replacement.innerHTML = addStylesNode.textContent;
+    document.body.appendChild(replacement)
+    addStylesNode.parentElement.removeChild(addStylesNode);
+  };
+  var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+  if (raf)
+    raf(function() {
+      window.setTimeout(loadDeferredStyles, 0);
+    });
+  else window.addEventListener('load', loadDeferredStyles);
+</script>
+</html>

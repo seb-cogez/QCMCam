@@ -1,0 +1,1 @@
+Identification de photographies prises en MET, MEB ou MO.
