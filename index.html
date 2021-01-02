@@ -322,6 +322,34 @@
     <input type="image" src="css/img/flags/flag-fr.png" onclick="QCMCam.lang.changeLanguage('fr');"/>
     <input type='image' src="css/img/flags/flag-earth.png" title="Stripe Icons by Bnjamin De Cock" onclick="window.open('https://dribbble.com/shots/1089488-Stripe-Flag-Set?utm_source=Clipboard_Shot&utm_campaign=bdc&utm_content=Stripe%20Flag%20Set&utm_medium=Social_Share')" />
   </div>
+  <div id="group-manager" class="hidden">
+    <section id="initial-group">
+
+    </section>
+    <section id="isolated-users">
+
+    </section>
+    <nav>
+      <section id="generation-menu">
+        Nombre de groupes : <input type="number" name="nb-groups" id="nb-groups">
+        Effectif par groupe : <input type="number" name="eff-group" id="eff-group">
+        Créer des groupes : <button>au hasard</button>
+        <button>hétérogènes</button>
+        <button>homogènes</button>
+      </section>
+      <section id="roles-menu">
+        <input type="checkbox" name="resp-time" id="resp-time"><label for="resp-time">Temps</label>
+        <input type="checkbox" name="resp-speak" id="resp-speak"><label for="resp-speak">Parole</label>
+        <input type="checkbox" name="resp-ideas" id="resp-ideas"><label for="resp-ideas">Idées/porte-parole</label>
+        <input type="checkbox" name="resp-calm" id="resp-calm"><label for="resp-calm">Silence</label>
+        <input type="checkbox" name="resp-instr" id="resp-instr"><label for="resp-instr">Consigne</label>
+        <input type="checkbox" name="resp-material" id="resp-material"><label for="resp-material">Matériel</label>
+      </section>
+    </nav>
+    <section id="resulted-groups">
+
+    </section>
+  </div>
 </body>
 <script>
   var loadDeferredStyles = function() {
