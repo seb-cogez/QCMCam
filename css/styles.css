@@ -688,3 +688,71 @@ ol > li::before {
     height: 48px;
   }
 }
+
+#group-manager {
+  position: absolute;
+  z-index: 50;
+  background-color: #ccc;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:10px;
+}
+#initial-group > div, #isolated-users > div {
+  display: inline-block;
+  margin: 5px;
+  cursor: pointer;
+}
+#resulted-groups fieldset > div {
+  margin:5px;
+}
+#resulted-groups .bleu, #resulted-groups .violet, #resulted-groups .orange, #resulted-groups .rouge, #resulted-groups .azur, #resulted-groups .vert {
+  margin-left:5px;
+}
+#repartir {
+  color: green;
+}
+#ignorer {
+  color: red;
+}
+#nb-groups, #nb-per-group {
+  font-size: 1em;
+}
+#group-manager fieldset {
+  border: 2px solid grey;
+  border-radius: 0.3em;
+  background-color: white;
+  display: inline-block;
+  box-shadow: 4px 4px 6px #AAA;
+  padding: 0.5rem;
+  line-height: 1.2rem;
+  margin-bottom: 10px;
+}
+#group-manager fieldset legend {
+  display: block;
+  font-weight: 700;
+  width:initial;
+  background-color: white;
+}
+#group-manager button {
+  font-size: 1em;
+}
+.bleu {
+  color:blue;
+}
+.violet{
+  color:purple;
+}
+.orange{
+  color:orange;
+}
+.rouge{
+  color:red;
+}
+.azur{
+  color:#007FFF;
+}
+.vert{
+  color:green;
+}

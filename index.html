@@ -165,6 +165,7 @@
         <img id="btnalea" src="css/img/32px/user_info.png" title="Interroger un participant au hasard (ALT + K)" onClick="users.alea();" data-translate='{"title":"usersPanel.interrogaterandom"}' />
         <img id="btnappel" src="css/img/32px/if_comment_edit_66707.png" onclick="users.appel();" title="Supprimer les utilisateurs qui n'ont pas répondu" data-translate='{"title":"usersPanel.deleteabsentees"}' />
         <img id="btnnames" src="css/img/32px/if_user_delete_66908.png" onclick="users.toggle();" title="Cacher/Montrer les noms" data-translate='{"title":"usersPanel.toggleusersnames"}' />
+        <img src="css/img/icones/managegroups.png" alt="Manage Groups" title="Créer des groupes" data-translate='{"title":"usersPanel.managegroups"}' onclick="users.manageGroups('open');" style="width:32px;height: 32px;">
       </div>
         <div id="messageedition" class="cache" data-translate='{"html":"usersPanel.userseditionmessage"}'>
           Cliquer sur les numéros ou les Noms pour les modifier.<br />
@@ -322,28 +323,31 @@
     <input type="image" src="css/img/flags/flag-fr.png" onclick="QCMCam.lang.changeLanguage('fr');"/>
     <input type='image' src="css/img/flags/flag-earth.png" title="Stripe Icons by Bnjamin De Cock" onclick="window.open('https://dribbble.com/shots/1089488-Stripe-Flag-Set?utm_source=Clipboard_Shot&utm_campaign=bdc&utm_content=Stripe%20Flag%20Set&utm_medium=Social_Share')" />
   </div>
-  <div id="group-manager" class="hidden">
-    <section id="initial-group">
-
-    </section>
-    <section id="isolated-users">
-
-    </section>
-    <nav>
+  <div id="group-manager" class="cache">
+    <img src="css/img/32px/close.png" style="float:right;cursor: pointer;" onclick="users.manageGroups('close');" />
+    <fieldset>
+      <legend>À répartir : <span id="repartir"></span></legend>
+      <div id="initial-group"></div>
+    </fieldset>
+    <fieldset>
+      <legend>À ignorer : <span id="ignorer"></span></legend>
+      <div id="isolated-users"></div>
+    </fieldset>
+    <fieldset id="roles-menu"><legend>Rôles à attribuer <input type ="checkbox" name="resp-all" id="resp-all" onchange="users.workgroup.checkAllRoles(this.checked);"></legend>
+      <input type="checkbox" name="resp-time" id="resp-time" onclick="users.workgroup.setRole('T', this.checked);"><label for="resp-time"><b class="bleu">T</b>emps</label>
+      <input type="checkbox" name="resp-speak" id="resp-speak" onclick="users.workgroup.setRole('P', this.checked);"><label for="resp-speak"><b class="violet">P</b>arole</label>
+      <input type="checkbox" name="resp-ideas" id="resp-ideas" onclick="users.workgroup.setRole('I', this.checked);"><label for="resp-ideas"><b class="orange">I</b>dées/porte-parole</label>
+      <input type="checkbox" name="resp-calm" id="resp-calm" onclick="users.workgroup.setRole('S', this.checked);"><label for="resp-calm"><b class="vert">S</b>ilence</label>
+      <input type="checkbox" name="resp-instr" id="resp-instr" onclick="users.workgroup.setRole('C', this.checked);"><label for="resp-instr"><b class="rouge">C</b>onsigne</label>
+      <input type="checkbox" name="resp-material" id="resp-material" onclick="users.workgroup.setRole('M', this.checked);"><label for="resp-material"><b class="azur">M</b>atériel</label>
+    </fieldset>
+  <nav>
       <section id="generation-menu">
-        Nombre de groupes : <input type="number" name="nb-groups" id="nb-groups">
-        Effectif par groupe : <input type="number" name="eff-group" id="eff-group">
-        Créer des groupes : <button>au hasard</button>
-        <button>hétérogènes</button>
-        <button>homogènes</button>
-      </section>
-      <section id="roles-menu">
-        <input type="checkbox" name="resp-time" id="resp-time"><label for="resp-time">Temps</label>
-        <input type="checkbox" name="resp-speak" id="resp-speak"><label for="resp-speak">Parole</label>
-        <input type="checkbox" name="resp-ideas" id="resp-ideas"><label for="resp-ideas">Idées/porte-parole</label>
-        <input type="checkbox" name="resp-calm" id="resp-calm"><label for="resp-calm">Silence</label>
-        <input type="checkbox" name="resp-instr" id="resp-instr"><label for="resp-instr">Consigne</label>
-        <input type="checkbox" name="resp-material" id="resp-material"><label for="resp-material">Matériel</label>
+        Nombre de groupes : <input type="number" name="nb-groups" id="nb-groups" onchange="users.workgroup.calcnbpergroup(this.value);" size="2">
+        Effectif par groupe : <input type="number" name="nb-per-group" id="nb-per-group" value="4" onchange="users.workgroup.calcnbgroups(this.value);" size="2">
+        Créer des groupes : <button onclick="users.workgroup.alea()">au hasard</button>
+        <button onclick="users.workgroup.hetero()">hétérogènes</button>
+        <button onclick="users.workgroup.homo()">homogènes</button>
       </section>
     </nav>
     <section id="resulted-groups">

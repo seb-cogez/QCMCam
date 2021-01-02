@@ -1436,6 +1436,15 @@ var utils = {
         }
         return true;
     },
+    /**
+     * shuffle an array
+     * @param {Array} arr 
+     */
+    shuffle : function(arr){
+        if(!Array.isArray(arr))return false;
+        arr.sort(()=>Math.random()-0.5);
+        return arr;
+    },
     /*
      * Supprime un élément d'un tableau
      */
@@ -2572,6 +2581,18 @@ var users = {
             document.getElementById("listeeleves").innerHTML = message;
             utils.afficheAccueil(false);
             }
+    },
+    /**
+     * Permet de créer des groupes à partir de la classe affichée.
+     */
+    manageGroups:function(action){
+        if(action === "open"){
+            document.getElementById("group-manager").className = "";
+            users.workgroup = new groupe(users.eleves);
+            users.workgroup.display();
+        } else {
+            document.getElementById("group-manager").className = "cache";
+        }
     }
 };
 /*
@@ -2585,6 +2606,7 @@ var answers = {
     canvas: null,
     context: null,
     nbColors: 11,
+    scores:{},
     contextInit: function () {
         this.context = this.canvas.getContext("2d");
         this.context.font = "30px Arial";
@@ -2608,6 +2630,7 @@ var answers = {
             QCMeditors.removeStyle(i);
         }
         qdatas = {};
+        this.scores={};
         // en cas de gestion avec le portable
         if (comm.sessionId > 0 || comm.peerId !== false) {
             usersChangeDetected = true;
@@ -3005,6 +3028,7 @@ var answers = {
             }
             qexport += "\t" + score;
             cells.push(score);
+            answers.scores[i] = score;
             row = tableau.insertRow(cmptr);
             this.completeLigne(cells, row);
             cmptr++;
@@ -3836,6 +3860,219 @@ var comm = {
         }
     }
 };
+/**
+ * Creation de groupes de travail
+ */
+class groupe {
+    /**
+     * 
+     * @param {object} liste objet contenant les participants à répartir dans des groupes {clé:nom}
+     */
+    constructor(liste){
+        this.liste = liste;
+        this.isoles = {};
+        this.effectif = liste.effectif;
+        this.roles = [];
+        this.ignore = 0;
+        this.nbpergroup = 4;
+        this.nbgroups = this.calcnbgroups(4);
+        this.editedValue = "nbpergroup"; // other value : nbgroups
+        //uncheck all rôles
+        this.checkAllRoles(false);
+    }
+    /**
+     * check or uncheck all roles
+     * @param {boolean} bool
+     */
+    checkAllRoles(bool){
+        let listeRoles = ["time","speak", "ideas","calm","instr","material", "all"];
+        if(!bool) this.roles = [];
+        else this.roles = ["T","P","I","S","C","M"];
+        for(let i=0,len=listeRoles.length;i<len;i++){
+            document.getElementById("resp-"+listeRoles[i]).checked = bool;
+        }
+    }
+    /**
+     * affiche la liste et les isolés
+     */
+    display(){
+        let initial = document.getElementById("initial-group");
+        initial.innerHTML = "";
+        let isolated = document.getElementById("isolated-users");
+        isolated.innerHTML = "";
+        this.effectif = 0;
+        this.ignore = 0;
+        this.ids = [];
+        for(let i in this.liste){
+            if(isNaN(i)) continue;// avoid effectif
+            if(this.isoles[i] === undefined){
+                this.ids.push(i);
+                initial.appendChild(this.createDomElement(i,"out"));
+                this.effectif++;
+            } else {
+                isolated.appendChild(this.createDomElement(i,"in"));
+                this.ignore++;
+            }
+        }
+        document.getElementById("repartir").innerHTML = this.effectif;
+        document.getElementById("ignorer").innerHTML = this.ignore;
+        if(this.editedValue === "nbpergroup")
+            this.calcnbgroups(this.nbpergroup);
+        else
+            this.calcnbpergroup(this.nbgroups);
+    }
+    createDomElement(userId,action){
+        let div = document.createElement("div");
+        div.className = "groupUser";
+        div.dataset.id = userId;
+        let span = document.createElement("span");
+        span.innerHTML = userId;
+        span.className = "numero";
+        div.appendChild(span);
+        div.appendChild(document.createTextNode(this.liste[userId]));
+        if(action ==="out" )
+            div.addEventListener("click",function(evt){users.workgroup.isolate(evt.target.dataset.id)});
+        else if(action ==="in")
+            div.addEventListener("click",function(evt){users.workgroup.unisolate(evt.target.dataset.id)});
+        else if(action !== ""){
+            // chaine de codes de groupe
+            let associtions = {"T":"bleu","P":"violet","I":"orange","S":"vert","C":"rouge","M":"azur"};
+            for(let i=0,len=action.length;i<len;i++){
+                let span = document.createElement("span");
+                span.className = associtions[action[i]];
+                span.textContent = action[i];
+                div.appendChild(span);
+            }
+        }
+        return div;
+    }
+    isolate(id){
+        this.isoles[id] = this.liste[id];
+        this.display();
+    }
+    unisolate(id){
+        delete this.isoles[id];
+        this.display();
+    }
+    calcnbgroups(value){
+        this.editedValue = "nbpergroup";
+        this.nbpergroup = value;
+        this.nbgroups = Math.ceil(this.effectif/value);
+        document.getElementById("nb-groups").value = this.nbgroups;
+    }
+    calcnbpergroup(value){
+        this.editedValue = "nbgroups";
+        this.nbgroups = value;
+        this.nbpergroup = Math.ceil(this.effectif/value);
+        document.getElementById("nb-per-group").value = this.nbpergroup;
+    }
+    setRole(value,bool){
+        if(bool){
+            this.roles.push(value);
+        } else {
+            this.roles.splice(this.roles.indexOf(value),1);
+        }
+    }
+    /**
+     * Crée des groupes répartis de manière aléatoire
+     */
+    alea(){
+        // mélange des ids
+        this.ids = utils.shuffle(this.ids);
+        this.groups = [];
+        // création des groupes
+        for(let i=0;i<this.nbgroups;i++){
+            this.groups.push([]);
+        }
+        for(let i=0,len=this.ids.length;i<len;i++){
+            const j=i%this.nbgroups;
+            this.groups[j].push(this.ids[i]);
+        }
+        // affichage des groupes
+        this.displayGroups();
+    }
+    /**
+     * Crée des groupes hétérogènes
+     */
+    hetero(){
+        if(utils.isEmpty(qdatas)){
+            alert("Pas de score pour répartir les élèves");
+            return false;
+        } else {
+            answers.fillTable();// calcule les résultats.
+            let tables = {};
+            let values = [];
+            for(let i in answers.scores){
+                if(isNaN(answers.scores[i])) continue;
+                let score = answers.scores[i]
+                if(tables[score] === undefined){
+                    tables[score] = [];
+                    values.push(score);
+                }
+                tables[score].push(i);
+            }
+            values.sort((a,b)=>b-a);
+            this.ids = [];
+            for(let i=0;i<values.length;i++){
+                tables[values[i]]= utils.shuffle(tables[values[i]]);
+                this.ids = ids.concat(tables[values[i]]);
+            }
+            this.groups = [];
+            // création des groupes
+            for(let i=0;i<this.nbgroups;i++){
+                this.groups.push([]);
+            }
+            for(let i=0,len=this.ids.length;i<len;i++){
+                const j=i%this.nbgroups;
+                this.groups[j].push(this.ids[i]);
+            }
+            // affichage des groupes
+            this.displayGroups();
+            }
+    }
+    /**
+     * Crée des groupes homogènes
+     */
+    homo(){
+
+    }
+    /**
+     * Affiche les groupes créés
+     */
+    displayGroups(){
+        let dest = document.getElementById("resulted-groups");
+        dest.innerHTML = "";
+        for(let i=0,len=this.groups.length;i<len;i++){
+            let fieldset = document.createElement("fieldset");
+            let legend = document.createElement("legend");
+            legend.innerHTML = "Groupe "+(i+1);
+            fieldset.appendChild(legend);
+            for(let j=0,len2=this.groups[i].length;j<len2;j++){
+                fieldset.appendChild(this.createDomElement(this.groups[i][j],this.giveRole(j,len2)));
+            }
+            dest.appendChild(fieldset);
+        }
+    }
+    /**
+     * donne un ou des rôles à l'utilisateur en fonction de sa place et de la taille du groupe
+     * @param {integer} index place dans le groupe
+     * @param {integer} taille taille du groupe
+     */
+    giveRole(index,taille){
+        let nbRoles = this.roles.length;
+        if(taille>=nbRoles){ // il y a assez d'utilisateurs pour le nb de rôles prévus
+            if(this.roles[index] !== undefined)
+                return this.roles[index];
+            else return "";
+        } else { // il y a moins d'utilisateurs que de rôles prévus, on donne plusieurs rôles.
+            let chaine ="";
+            for(let i=index;i<nbRoles;i=i+taille){
+                chaine += this.roles[i];
+            }
+            return chaine;
+        }
+    }
+}
 /*
  * créations initiales au chargement de la page web.
  * @returns {undefined}
