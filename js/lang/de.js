@@ -22,7 +22,8 @@ QCMCam.lang['de'] = {
     'groupsdownload' : 'Die Gruppen auf Ihren Computer herunterladen',
     'restoredefault' :'Standardgruppen wiederherstellen',
     'userssavelists' : 'Speichern der Gruppenliste',
-    'setFullHD' : 'Startet die Webcam im Full HD-Modus (falls kompatibel)'
+    'setFullHD' : 'Startet die Webcam im Full HD-Modus (falls kompatibel)',
+    'source': 'Quellcode auf github'
   },
   "navigationPanel":{
     'firstquestion' : 'Zur ersten Frage gehen',
@@ -68,6 +69,7 @@ QCMCam.lang['de'] = {
     'demo' : 'Demonstration',
     'titleinfo':"Alles, was du über diese App wissen musst.",
     'info' : 'Informationen auf der Website',
+    'source':'Quellcode und Community',
     'titleyoutube':"Auf den QCMCam.net Youtube-Kanal zugreifen",
     'youtube' : 'Youtube Kanal',
     'titlemarkers':"Markierungen herunterladen, um mit QCMCam zu spielen.",

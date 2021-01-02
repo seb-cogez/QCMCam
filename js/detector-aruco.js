@@ -1326,6 +1326,9 @@ var utils = {
             elt2.removeEventListener("paste", utils.urlVerify);
         }
     },
+    gotoGitHub(){
+        window.location.href="https://github.com/seb-cogez/QCMCam";
+    },
     /*
     * setterFullHD : hide or show FullHD option
     */

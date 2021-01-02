@@ -22,7 +22,8 @@ QCMCam.lang['en'] = {
     'groupsdownload' : 'Download the groups to your computer',
     'restoredefault' :'Restore default groups',
     'userssavelists' : 'Save the group list',
-    'setFullHD' : 'Starts webcam in Full HD mode (if compatible)'
+    'setFullHD' : 'Starts webcam in Full HD mode (if compatible)',
+    'source': 'Source code on github'
   },
   "navigationPanel":{
     'firstquestion' : 'Go to the first question',
@@ -68,6 +69,7 @@ QCMCam.lang['en'] = {
     'demo' : 'Demonstration',
     'titleinfo':"Everything you need to know about this app",
     'info' : 'Site Information on the website',
+    'source':'Source code and community',
     'titleyoutube':"Go to the QCMcam.net's Youtube channel",
     'youtube' : 'Youtube channel',
     'titlemarkers':"Download markers to play with QCMCam",

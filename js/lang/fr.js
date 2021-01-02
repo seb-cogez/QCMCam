@@ -22,7 +22,8 @@ QCMCam.lang['fr'] = {
     'groupsdownload' : 'Télécharger les groupes sur votre ordinateur',
     'restoredefault' : 'Restaurer les groupes par défaut',
     'userssavelists' : 'Enregistrer la liste de groupes',
-    'setFullHD' : 'Démarre la caméra en Full HD (si compatible)'
+    'setFullHD' : 'Démarre la caméra en Full HD (si compatible)',
+    'source': 'Code source sur github'
   },
   "navigationPanel":{
     'firstquestion' : 'Aller à la première question',
@@ -63,24 +64,25 @@ QCMCam.lang['fr'] = {
     'pastehere':"Coller ici"
   },
   "startPanel":{
-    'startdescription' : "la web'app pour <b>sonder</b> avec une <b>webcam</b> ou un smartphone",
-    'licence':'licence <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>',
     'demo' : 'Demonstration',
-    'titleinfo':"Tout ce qu'il faut savoir sur cette appli",
-    'info' : 'Informations sur le site',
-    'titleyoutube':"Accéder à la chaine Youtube de QCMCam.net",
-    'youtube' : 'Chaine Youtube',
-    'titlemarkers':"Télécharger les marqueurs pour jouer avec QCMCam",
-    'markers' : 'Marqueurs au format A4',
-    'titledocumentation':"Télécharger la documentation",
     'documentation' : 'PDF de la Documentation',
-    'titlegenerator':"Accéder au générateur de marqueur si vous avez perdu le vôtre",
     'generator' : 'Générateur de marqueur',
-    'smartphone': 'Adresse pour le smartphone',
+    'info' : 'Informations sur le site',
+    'licence':'licence <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>',
+    'mailto':'Questions ou remarques',
+    'markers' : 'Marqueurs au format A4',
     'noneedqrscan':'Pas besoin de lecteur de QRCode, scanner depuis la page.',
     'raspberry':'Image pour Raspberry Pi',
     'raspberry2':'réalisée par Johannes Holstein',
-    'mailto':'Questions ou remarques'
+    'smartphone': 'Adresse pour le smartphone',
+    'source':'Code source et communauté',
+    'startdescription' : "la web'app pour <b>sonder</b> avec une <b>webcam</b> ou un smartphone",
+    'titledocumentation':"Télécharger la documentation",
+    'titlegenerator':"Accéder au générateur de marqueur si vous avez perdu le vôtre",
+    'titleinfo':"Tout ce qu'il faut savoir sur cette appli",
+    'titlemarkers':"Télécharger les marqueurs pour jouer avec QCMCam",
+    'titleyoutube':"Accéder à la chaine Youtube de QCMCam.net",
+    'youtube' : 'Chaine Youtube'
   },
   "usersPanel":{
     'interrogatewrong' : 'Désigner un participant ayant voté faux',
