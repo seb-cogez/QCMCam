@@ -327,7 +327,7 @@
     <img src="css/img/32px/close.png" style="float:right;cursor: pointer;" onclick="users.manageGroups('close');" />
     <header>> Création aléatoire de groupes</header>
     <fieldset>
-      <legend>À répartir : <span id="repartir"></span> (cliquer pour isoler) <img src="css/img/32px/menu.png" onclick="users.workgroup.show()" width="24" height="24" style="vertical-align: center; cursor: pointer;"></legend>
+      <legend>À répartir : <span id="repartir"></span> (cliquer pour isoler) <img src="css/img/32px/menu.png" onclick="users.workgroup.show()" width="24" height="24" style="vertical-align: middle; cursor: pointer;"></legend>
       <div id="initial-group"></div>
     </fieldset>
     <fieldset>
@@ -346,8 +346,11 @@
         Nombre de groupes : <input type="number" name="nb-groups" id="nb-groups" onchange="users.workgroup.calcnbpergroup(this.value);" size="2">
         Effectif par groupe : <input type="number" name="nb-per-group" id="nb-per-group" value="4" onchange="users.workgroup.calcnbgroups(this.value);" size="2">
         Créer des groupes : <button onclick="users.workgroup.alea()">au hasard</button>
-        <button onclick="users.workgroup.hetero()">hétérogènes</button>
-        <button onclick="users.workgroup.homo()">homogènes</button>
+        <span id="group-with-score" class="cache">
+          <button onclick="users.workgroup.hetero()">hétérogènes</button>
+          <button onclick="users.workgroup.homo()">homogènes</button>
+          <button onclick="users.workgroup.showScore()" title="Montrer/cacher les scores">Scores</button>
+        </span>
     </nav>
     <section id="resulted-groups">
 

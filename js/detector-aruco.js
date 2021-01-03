@@ -430,6 +430,7 @@ function createFakeScores(nb){
     nbQ = nb;
     qreponses = {};
     qdatas={};
+    datas={};
     for(let j=0;j<nb;j++){
         for (let i = 1; i <= 30; i++) {
             let alea = Math.floor(Math.random() * 4);
@@ -438,7 +439,9 @@ function createFakeScores(nb){
                 nbvotes: 1
             };
         }
-        qdatas[j] = Object.assign({},datasdemo);
+        if(j==0)datas = Object.assign({},datasdemo);
+        else
+            qdatas[j] = Object.assign({},datasdemo);
         qreponses[j] = tb[Math.floor(Math.random() * 4)];
     }
 }
@@ -2615,6 +2618,12 @@ var users = {
      */
     manageGroups:function(action){
         if(action === "open"){
+            if(!utils.isEmpty(qdatas)){
+                answers.fillTable();// calcule les résultats.
+                document.getElementById("group-with-score").className = "";
+            } else {
+                document.getElementById("group-with-score").className = "cache";
+            }
             document.getElementById("group-manager").className = "";
             users.workgroup = new groupe(users.eleves);
             users.workgroup.display();
@@ -3926,8 +3935,21 @@ class groupe {
     show(){
         if(document.getElementById("initial-group").className === ""){
             document.getElementById("initial-group").className = "cache";
+            document.getElementById("isolated-users").className = "cache";
         } else {
             document.getElementById("initial-group").className = "";
+            document.getElementById("isolated-users").className = "";
+        }
+    }
+    showScore(){
+        let spans = document.querySelectorAll("#group-manager span[data-score='1']");
+        let classname = "cache";
+        if(!spans.length) return;
+        if(spans[0].className === "cache"){
+            classname = "";
+        }
+        for(let i=0,len=spans.length;i<len;i++){
+            spans[i].className = classname;
         }
     }
     /**
@@ -3968,7 +3990,13 @@ class groupe {
         span.className = "numero";
         div.appendChild(span);
         div.appendChild(document.createTextNode(this.liste[userId]));
-        if(!isNaN(answers.scores[userId]))div.appendChild(document.createTextNode("("+answers.scores[userId]+")"));
+        if(!isNaN(answers.scores[userId])){
+            let span = document.createElement("span");
+            span.className = "cache";
+            span.dataset.score = "1";
+            span.innerHTML ="("+answers.scores[userId]+")";
+            div.appendChild(span);
+        }
         if(action ==="out" )
             div.addEventListener("click",function(evt){users.workgroup.isolate(this.dataset.id)});
         else if(action ==="in")
@@ -4040,12 +4068,11 @@ class groupe {
             alert("Pas de score pour répartir les élèves");
             return false;
         } else {
-            answers.fillTable();// calcule les résultats.
             let tables = {};
             let values = [];
             for(let i in answers.scores){
-                if(isNaN(answers.scores[i])) continue;
-                let score = answers.scores[i]
+                if(isNaN(answers.scores[i]) || this.ids.indexOf(i)<0) continue;
+                let score = answers.scores[i];
                 if(tables[score] === undefined){
                     tables[score] = [];
                     values.push(score);
@@ -4080,11 +4107,10 @@ class groupe {
             alert("Pas de score pour répartir les élèves");
             return false;
         } else {
-            answers.fillTable();// calcule les résultats.
             let tables = {};
             let values = [];
             for(let i in answers.scores){
-                if(isNaN(answers.scores[i])) continue;
+                if(isNaN(answers.scores[i]) || this.ids.indexOf(i)<0) continue;
                 let score = answers.scores[i]
                 if(tables[score] === undefined){
                     tables[score] = [];
