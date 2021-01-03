@@ -165,7 +165,7 @@
         <img id="btnalea" src="css/img/32px/user_info.png" title="Interroger un participant au hasard (ALT + K)" onClick="users.alea();" data-translate='{"title":"usersPanel.interrogaterandom"}' />
         <img id="btnappel" src="css/img/32px/if_comment_edit_66707.png" onclick="users.appel();" title="Supprimer les utilisateurs qui n'ont pas répondu" data-translate='{"title":"usersPanel.deleteabsentees"}' />
         <img id="btnnames" src="css/img/32px/if_user_delete_66908.png" onclick="users.toggle();" title="Cacher/Montrer les noms" data-translate='{"title":"usersPanel.toggleusersnames"}' />
-        <img src="css/img/icones/managegroups.png" alt="Manage Groups" title="Créer des groupes" data-translate='{"title":"usersPanel.managegroups"}' onclick="users.manageGroups('open');" style="width:32px;height: 32px;">
+        <img src="css/img/32px/students 2.png" alt="Manage Groups" title="Créer des groupes" data-translate='{"title":"usersPanel.managegroups"}' onclick="users.manageGroups('open');">
       </div>
         <div id="messageedition" class="cache" data-translate='{"html":"usersPanel.userseditionmessage"}'>
           Cliquer sur les numéros ou les Noms pour les modifier.<br />
@@ -325,12 +325,13 @@
   </div>
   <div id="group-manager" class="cache">
     <img src="css/img/32px/close.png" style="float:right;cursor: pointer;" onclick="users.manageGroups('close');" />
+    <header>> Création aléatoire de groupes</header>
     <fieldset>
-      <legend>À répartir : <span id="repartir"></span></legend>
+      <legend>À répartir : <span id="repartir"></span> (cliquer pour isoler) <img src="css/img/32px/menu.png" onclick="users.workgroup.show()" width="24" height="24" style="vertical-align: center; cursor: pointer;"></legend>
       <div id="initial-group"></div>
     </fieldset>
     <fieldset>
-      <legend>À ignorer : <span id="ignorer"></span></legend>
+      <legend>Absents ou singletons : <span id="ignorer"></span></legend>
       <div id="isolated-users"></div>
     </fieldset>
     <fieldset id="roles-menu"><legend>Rôles à attribuer <input type ="checkbox" name="resp-all" id="resp-all" onchange="users.workgroup.checkAllRoles(this.checked);"></legend>
@@ -341,14 +342,12 @@
       <input type="checkbox" name="resp-instr" id="resp-instr" onclick="users.workgroup.setRole('C', this.checked);"><label for="resp-instr"><b class="rouge">C</b>onsigne</label>
       <input type="checkbox" name="resp-material" id="resp-material" onclick="users.workgroup.setRole('M', this.checked);"><label for="resp-material"><b class="azur">M</b>atériel</label>
     </fieldset>
-  <nav>
-      <section id="generation-menu">
+  <nav id="generation-menu">
         Nombre de groupes : <input type="number" name="nb-groups" id="nb-groups" onchange="users.workgroup.calcnbpergroup(this.value);" size="2">
         Effectif par groupe : <input type="number" name="nb-per-group" id="nb-per-group" value="4" onchange="users.workgroup.calcnbgroups(this.value);" size="2">
         Créer des groupes : <button onclick="users.workgroup.alea()">au hasard</button>
         <button onclick="users.workgroup.hetero()">hétérogènes</button>
         <button onclick="users.workgroup.homo()">homogènes</button>
-      </section>
     </nav>
     <section id="resulted-groups">
 

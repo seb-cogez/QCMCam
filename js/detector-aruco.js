@@ -307,6 +307,7 @@ function lancerDemo() {
                     datas = datasdemo;
                     answers.updateVotes();
                     answers.compteValeurs();
+                    qdatas[QCMeditors.qFocusOn] = Object.assign({},datas);
                 }
             }
         }
@@ -317,6 +318,16 @@ function lancerDemo() {
             setTimeout(function () {
                 CKEDITOR.instances['editor' + QCMeditors.qFocusOn].setData("<h2>Combien font 8×7 ?</h2><p>A. 87</p><p>B. 54</p><p>C. 56</p><p>D. 63");
             }, 1000);
+            // on met des fausses réponses à la première question
+            for (let i = 1; i <= 30; i++) {
+                let alea = Math.floor(Math.random() * 4);
+                datasdemo[i] = {
+                    vote: ["A", "B", "C", "D"][alea],
+                    nbvotes: 1
+                };
+            }
+            datas = Object.assign({},datasdemo);
+            qreponses[QCMeditors.qFocusOn] = ["A", "B", "C", "D"][Math.floor(Math.random() * 4)];
         }
         if (tElem.id === "btnadd") {
             setTimeout(function () {
@@ -413,6 +424,23 @@ function lancerDemo() {
         ]
     });
     intro.start();
+}
+function createFakeScores(nb){
+    let tb=["A","B","C","D"];
+    nbQ = nb;
+    qreponses = {};
+    qdatas={};
+    for(let j=0;j<nb;j++){
+        for (let i = 1; i <= 30; i++) {
+            let alea = Math.floor(Math.random() * 4);
+            datasdemo[i] = {
+                vote: tb[alea],
+                nbvotes: 1
+            };
+        }
+        qdatas[j] = Object.assign({},datasdemo);
+        qreponses[j] = tb[Math.floor(Math.random() * 4)];
+    }
 }
 var QCMeditors = {
     fileJustLoaded:false,
@@ -3893,6 +3921,16 @@ class groupe {
         }
     }
     /**
+     * hide or show block users
+     */
+    show(){
+        if(document.getElementById("initial-group").className === ""){
+            document.getElementById("initial-group").className = "cache";
+        } else {
+            document.getElementById("initial-group").className = "";
+        }
+    }
+    /**
      * affiche la liste et les isolés
      */
     display(){
@@ -3930,10 +3968,11 @@ class groupe {
         span.className = "numero";
         div.appendChild(span);
         div.appendChild(document.createTextNode(this.liste[userId]));
+        if(!isNaN(answers.scores[userId]))div.appendChild(document.createTextNode("("+answers.scores[userId]+")"));
         if(action ==="out" )
-            div.addEventListener("click",function(evt){users.workgroup.isolate(evt.target.dataset.id)});
+            div.addEventListener("click",function(evt){users.workgroup.isolate(this.dataset.id)});
         else if(action ==="in")
-            div.addEventListener("click",function(evt){users.workgroup.unisolate(evt.target.dataset.id)});
+            div.addEventListener("click",function(evt){users.workgroup.unisolate(this.dataset.id)});
         else if(action !== ""){
             // chaine de codes de groupe
             let associtions = {"T":"bleu","P":"violet","I":"orange","S":"vert","C":"rouge","M":"azur"};
@@ -3985,6 +4024,7 @@ class groupe {
             this.groups.push([]);
         }
         for(let i=0,len=this.ids.length;i<len;i++){
+            // distribution alternative dans chaque groupe
             const j=i%this.nbgroups;
             this.groups[j].push(this.ids[i]);
         }
@@ -3993,6 +4033,7 @@ class groupe {
     }
     /**
      * Crée des groupes hétérogènes
+     * pas très efficace, à revoir
      */
     hetero(){
         if(utils.isEmpty(qdatas)){
@@ -4011,11 +4052,11 @@ class groupe {
                 }
                 tables[score].push(i);
             }
-            values.sort((a,b)=>b-a);
+            values.sort(); // rangement des valeurs dans l'ordre croissant
             this.ids = [];
             for(let i=0;i<values.length;i++){
                 tables[values[i]]= utils.shuffle(tables[values[i]]);
-                this.ids = ids.concat(tables[values[i]]);
+                this.ids = this.ids.concat(tables[values[i]]);
             }
             this.groups = [];
             // création des groupes
@@ -4023,18 +4064,53 @@ class groupe {
                 this.groups.push([]);
             }
             for(let i=0,len=this.ids.length;i<len;i++){
+                // distribution alternative dans chaque groupe
                 const j=i%this.nbgroups;
                 this.groups[j].push(this.ids[i]);
             }
             // affichage des groupes
             this.displayGroups();
-            }
+        }
     }
     /**
-     * Crée des groupes homogènes
+     * Crée des groupes "homogènes"
      */
     homo(){
-
+        if(utils.isEmpty(qdatas)){
+            alert("Pas de score pour répartir les élèves");
+            return false;
+        } else {
+            answers.fillTable();// calcule les résultats.
+            let tables = {};
+            let values = [];
+            for(let i in answers.scores){
+                if(isNaN(answers.scores[i])) continue;
+                let score = answers.scores[i]
+                if(tables[score] === undefined){
+                    tables[score] = [];
+                    values.push(score);
+                }
+                tables[score].push(i);
+            }
+            values.sort();
+            this.ids = [];
+            for(let i=0;i<values.length;i++){
+                tables[values[i]]= utils.shuffle(tables[values[i]]);
+                this.ids = this.ids.concat(tables[values[i]]);
+            }
+            this.groups = [];
+            // création des groupes
+            for(let i=0;i<this.nbgroups;i++){
+                this.groups.push([]);
+            }
+            for(let i=0,len=this.ids.length;i<len;i++){
+                // remplissage de chaque groupe jusqu'à plein. => pb pour le dernier groupe.
+                const j=Math.floor(i/this.nbpergroup);
+                this.groups[j].push(this.ids[i]);
+            }
+            // affichage des groupes
+            this.displayGroups();
+        }
     }
     /**
      * Affiche les groupes créés
