@@ -61,6 +61,7 @@ if(!empty($_FILES)) {
                         'status'    => 'success',
                         'info' => "file upload successful"
                     );
+                    mail("contact@qcmcam.net","Proposition QCM [envoi auto]","Descriptif :\n\t".$_POST['desc']."\n\nDestination : ".$_POST['dest']."\n".$fullPath);
                 } else {
                     $response = array (
                         'status' => 'error',

@@ -341,7 +341,7 @@ $(function(){
 					icon = '<span class="icon file f-'+fileType+'">.'+fileType+'</span>';
 
 					//var file = $('<li class="files"><section href="#'+ f.path+'" title="'+ f.path +'" class="files" onclick="ouvrir('+f.path+')">'+icon+'<span class="name">'+ name +'</span> <span class="details">'+fileSize+'</span><span class="descriptif">'+descriptif+'</span></section></li>');
-					var file = $('<li class="files"><section title="'+ f.path +'" class="files" onclick="ouvrir(\''+f.path+'\');">'+icon+'<span class="name">'+ name +'</span> <span class="details">'+fileSize+'</span><span class="descriptif">'+descriptif+'</span></section></li>');
+					var file = $('<li class="files"><section title="'+ f.path +'" class="files" onclick="ouvrir(\''+ f.path.replace("'","\\'") +'\');">'+icon+'<span class="name">'+ name +'</span> <span class="details">'+fileSize+'</span><span class="descriptif">'+descriptif+'</span></section></li>');
 					file.appendTo(fileList);
 				});
 

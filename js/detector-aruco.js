@@ -1157,32 +1157,40 @@ var QCMeditors = {
      * nécessite une connexion internet
      */
     loadFile: function (url, TF) {
+        let reader = new XMLHttpRequest();
         if(TF)// lecture depuis la bibliotheque
         {
-            var rawFile = new XMLHttpRequest();
-            rawFile.open("GET", url, false);
-            rawFile.onreadystatechange = function(){
-                if(rawFile.readyState === 4){
-                    if(rawFile.status === 200 || rawFile.status === 0){
-                        QCMeditors.replaceQuestions(rawFile.responseText);
-                        if (myWindow !== undefined) { // on ferme la bibliothèque si elle est ouverte
-                            myWindow.close();
+            reader.open("GET", url, false);
+            reader.onreadystatechange = function(){
+                if(reader.readyState === 4){
+                    if(reader.status === 200 || reader.status === 0){
+                        try{
+                            QCMeditors.replaceQuestions(reader.responseText);
+                            if (myWindow !== undefined) { // on ferme la bibliothèque si elle est ouverte
+                                myWindow.close();
+                            }
+                        }catch (err){
+                            console.error(err);
                         }
                     }
                 }
             }
-            rawFile.send(null);
+            reader.send(null);
             return;
-        }
-        var reader = new XMLHttpRequest();
-        reader.onload = function () {
-            // TODO : vérification du format
-            QCMeditors.replaceQuestions(reader.responseText);
-        };
-        reader.open("get", "phploader.php?url=" + encodeURIComponent(url), true);
-        reader.send();
-        if (myWindow !== undefined) { // on ferme la bibliothèque si elle est ouverte
-            myWindow.close();
+        } else {
+            reader.onload = function () {
+                // TODO : vérification du format
+                try{
+                    QCMeditors.replaceQuestions(reader.responseText);
+                }catch(err){
+                    console.error(err);
+                }
+            };
+            reader.open("get", "phploader.php?url=" + encodeURIComponent(url), true);
+            reader.send();
+            if (myWindow !== undefined) { // on ferme la bibliothèque si elle est ouverte
+                myWindow.close();
+            }
         }
     },
     /*
