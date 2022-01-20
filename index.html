@@ -11,7 +11,7 @@
 <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
 <link rel="preload" href="js/katex/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 <link rel="preload" href="js/katex/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-<link href="css/styles.min.css?v=8" rel="stylesheet" type="text/css" />
+<link href="css/styles.min.css?v=9" rel="stylesheet" type="text/css" />
 <script>
   var usePeerJs = false;
 </script>
@@ -24,7 +24,7 @@
 <script src="js/fullscreen.js" defer></script>
 <script src="js/intro.min.js" defer></script>
 <script src="js/katex/katex.min.js?v=0.11.1" defer></script>
-<script src="js/detector-aruco.min.js?v=24" defer></script>
+<script src="js/detector-aruco.min.js?v=25" defer></script>
 <script src="js/qrious-master/dist/qrious.min.js" defer></script>
 <script src="js/peer.min.js" defer></script>
 <script src="js/lang/fr.min.js" defer></script>
@@ -173,7 +173,7 @@
         </div>
         <div id="messageacceuil" class="flex">
           <p><span class="QCMCam">QCM<span class="orange">Cam</span></span>, <span data-translate='{"html":"startPanel.startdescription"}'>la web'app pour <b>sonder</b> avec une <b>webcam</b> ou un smartphone</span>.
-            <br />Copyright 2019 Sébastien COGEZ <span data-translate='{"alt":"startPanel.licence"}'>licence <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></span>.</p>
+            <br />Copyright 2022 Sébastien COGEZ <span data-translate='{"alt":"startPanel.licence"}'>licence <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></span>.</p>
           <div style="clear:both;"></div>
           <div class="c20" title="Code source sur github" onclick="utils.gotoGitHub();" data-translate='{"title":"generalPanel.source"}'>
             <img src="css/img/GitHub-Mark-64px.png" /><br />
@@ -226,7 +226,7 @@
       Il faudra donc les imprimer à nouveau pour ceux qui auraient d'anciens jeux. Ce changement est du à des problèmes de faux positifs lors des votes en classe. J'espère ne plus avoir à revenir là-dessus à l'avenir.<br />
       Si vous voulez partager vos questionnaires via la bibliothèque, ou demander des améliorations du logiciel, merci de m'écrire.</p>
     <p><img src="css/img/32px/info.png" alt="Informations complémentaires" />La lecture des QRVote se fait à l'aide d'une webcam ou d'un dispositif type smartphone/tablette.<br />Un tuto est directement accessible en cliquant sur l'icone "bouée de sauvetage".</p>
-    <p><img src="css/img/32px/disk7.png" alt="Ingénierie de gestion des fichiers" /> <a href="QCMCam.zip">Télécharger l'appli</a> pour un usage local ou pour modifier ce que vous voulez.</p>
+    <p><img src="css/img/32px/disk7.png" alt="Ingénierie de gestion des fichiers" /> <a href="https://github.com/seb-cogez/QCMCam/archive/refs/heads/main.zip">Télécharger l'appli</a> pour un usage local ou pour modifier ce que vous voulez.</p>
     <h4>R.G.P.D.</h4>
     <ul>
       <li>Aucune donnée n'est collectée sauf si vous me les envoyez par mail. Le seul cookie utilisé est celui nécessaire aux sessions avec un smartphone.</li>
@@ -324,8 +324,8 @@
     <input type='image' src="css/img/flags/flag-earth.png" title="Stripe Icons by Bnjamin De Cock" onclick="window.open('https://dribbble.com/shots/1089488-Stripe-Flag-Set?utm_source=Clipboard_Shot&utm_campaign=bdc&utm_content=Stripe%20Flag%20Set&utm_medium=Social_Share')" />
   </div>
   <div id="group-manager" class="cache">
-    <img src="css/img/32px/close.png" style="float:right;cursor: pointer;" onclick="users.manageGroups('close');" />
-    <header>> Création aléatoire de groupes</header>
+    <img src="css/img/32px/close.png" style="float:right;cursor: pointer;" onclick="users.manageGroups('close');" class="noprint" />
+    <header class="noprint">> Création aléatoire de groupes</header>
     <fieldset>
       <legend>À répartir : <span id="repartir"></span> (cliquer pour isoler) <img src="css/img/32px/menu.png" onclick="users.workgroup.show()" width="24" height="24" style="vertical-align: middle; cursor: pointer;"></legend>
       <div id="initial-group"></div>
@@ -334,7 +334,7 @@
       <legend>Absents ou singletons : <span id="ignorer"></span></legend>
       <div id="isolated-users"></div>
     </fieldset>
-    <fieldset id="roles-menu"><legend>Rôles à attribuer <input type ="checkbox" name="resp-all" id="resp-all" onchange="users.workgroup.checkAllRoles(this.checked);"></legend>
+    <fieldset id="roles-menu"><legend class="noprint">Rôles à attribuer <input type ="checkbox" name="resp-all" id="resp-all" onchange="users.workgroup.checkAllRoles(this.checked);"></legend>
       <input type="checkbox" name="resp-time" id="resp-time" onclick="users.workgroup.setRole('T', this.checked);"><label for="resp-time"><b class="bleu">T</b>emps</label>
       <input type="checkbox" name="resp-speak" id="resp-speak" onclick="users.workgroup.setRole('P', this.checked);"><label for="resp-speak"><b class="violet">P</b>arole</label>
       <input type="checkbox" name="resp-ideas" id="resp-ideas" onclick="users.workgroup.setRole('I', this.checked);"><label for="resp-ideas"><b class="orange">I</b>dées/porte-parole</label>
@@ -342,15 +342,18 @@
       <input type="checkbox" name="resp-instr" id="resp-instr" onclick="users.workgroup.setRole('C', this.checked);"><label for="resp-instr"><b class="rouge">C</b>onsigne</label>
       <input type="checkbox" name="resp-material" id="resp-material" onclick="users.workgroup.setRole('M', this.checked);"><label for="resp-material"><b class="azur">M</b>atériel</label>
     </fieldset>
-  <nav id="generation-menu">
+  <nav id="generation-menu" class="noprint">
         Nombre de groupes : <input type="number" name="nb-groups" id="nb-groups" onchange="users.workgroup.calcnbpergroup(this.value);" size="2">
         Effectif par groupe : <input type="number" name="nb-per-group" id="nb-per-group" value="4" onchange="users.workgroup.calcnbgroups(this.value);" size="2">
         Créer des groupes : <button onclick="users.workgroup.alea()">au hasard</button>
+        <button onclick="window.print();" title="Imprimer / créer un pdf">🖨</button>
+        <button onclick="users.workgroup.emptyGroups()">Vider</button>
         <span id="group-with-score" class="cache">
           <button onclick="users.workgroup.hetero()">hétérogènes</button>
           <button onclick="users.workgroup.homo()">homogènes</button>
           <button onclick="users.workgroup.showScore()" title="Montrer/cacher les scores">Scores</button>
-        </span>
+        </span><br>
+        <button onclick="users.workgroup.createOneGroup(document.getElementById('onegroup-size').value)">Créer</button> 1 groupe de <input type="number" id="onegroup-size" size="2" value="4"> éléments.
     </nav>
     <section id="resulted-groups">
 

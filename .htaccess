@@ -1,0 +1,6 @@
+# Canonical HTTPS/non-WWW
+<IfModule mod_rewrite.c>
+	RewriteCond %{HTTPS} off [OR]
+	RewriteCond %{HTTP_HOST} ^www\.qcmcam\.net [NC]
+	RewriteRule (.*) https://qcmcam.net/$1 [L,R=301]
+</IfModule>

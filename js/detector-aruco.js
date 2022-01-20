@@ -274,7 +274,7 @@ var correspondances = {
         59: 37
     }
 };
-// Par défaut, on prend le jeu des codes 5x5;
+// Par défaut, on prend le jeu des codes 4x4;
 // !!! variable utilisée dans aruco, ne pas la modifier sans modifier aruco.js ligne 51
 var typeCode = 4;
 var corres = correspondances["p" + typeCode];
@@ -4162,6 +4162,30 @@ class groupe {
             }
             dest.appendChild(fieldset);
         }
+    }
+    /**
+     * Crée un groupe de la taille passée en paramètre
+     */
+    createOneGroup(eff){
+        if(!isNaN(eff)){
+            // mélange des ids
+            this.ids = utils.shuffle(this.ids);
+            // création d'un groupe
+            this.groups = [[]];
+            for(let i=0;i<eff;i++){
+                // Affectation des n premiers éléments dans le groupe
+                this.groups[0].push(this.ids[i]);
+            }
+            // affichage des groupes
+            this.displayGroups();
+        }
+    }
+    /**
+     * Vide les groupes
+     */
+    emptyGroups(){
+        this.groups = [];
+        this.displayGroups();
     }
     /**
      * donne un ou des rôles à l'utilisateur en fonction de sa place et de la taille du groupe

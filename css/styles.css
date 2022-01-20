@@ -781,3 +781,14 @@ ol > li::before {
 .vert{
   color:green;
 }
+@media print {
+  .noprint {
+      display:none;
+  }
+  #group-manager {
+    background: white;
+  }
+  #group-manager > fieldset {
+    display: none;
+  }
+}
