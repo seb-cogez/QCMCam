@@ -2009,6 +2009,10 @@ var users = {
     college: null,
     classe: null,
     eleves: {},
+    // pour la sélection d'élèves interrogés.
+    interroges1:[], // table des participants interrogés une fois
+    interroges2:[], // table des participants interrogés une deuxième fois
+    listeTirages:[], // table des tirages
     collegeinit: {
         "GP1": {
             "1": "Participant 1",
@@ -2347,6 +2351,10 @@ var users = {
     setGroup: function (classe) {
         utils.afficheAccueil(false);
         utils.class('btnsaveclasses', "cache");
+        // remises à zéro
+        this.interroges1=[]; // table des participants interrogés une fois
+        this.interroges2=[]; // table des participants interrogés une deuxième fournies
+        this.listeTirages=[];
         if (classe !== undefined) {
             if (users.college[classe] !== undefined) {
                 // on stocke la classe affichée en cours
@@ -2426,15 +2434,17 @@ var users = {
      */
     alea: function (type) {
         if (users.eleves.effectif === undefined) {
-            alert(QCMCam.lang[lang].messages.groupmusthave);
+        // pas de groupe sélectionné.
+        alert(QCMCam.lang[lang].messages.groupmusthave);
             return;
         } else if ((type === false || type === true) && qreponses[QCMeditors.qFocusOn] === undefined) {
             alert(QCMCam.lang[lang].messages.goodanswermusthave);
             return;
         }
-        var i = 0;
-        var table = [];
+        let i = 0;
+        let table = [];
         for (i in datas) {
+            // parcours des résultats
             if (Number(i) > 0) {
                 if (type === undefined) {
                     table.push(i);
@@ -2455,7 +2465,34 @@ var users = {
             alert("Personne n'ayant répondu, action impossible");
             return;
         }
-        var alea = Math.floor(Math.random() * table.length);
+        let alea = 0;
+        let ok=false;
+        let breakafter500=0;
+        if(type === undefined){
+            do{
+                alea = Math.floor(Math.random() * table.length);
+                breakafter500++;
+                if(this.interroges1.indexOf(alea)<0){
+                    // pas encore interrogé
+                    ok=true;
+                    this.interroges1.push(alea);
+                    if(this.interroges1.length === table.length)
+                    // tout le monde a été interrogé une fois, on vide le cache
+                    this.interroges1 = [];
+                } else if(table.length>5 && this.interroges2.indexOf(alea)<0 && this.listeTirages.indexOf(alea)<this.listeTirages.length-5){
+                    // on accepte une deuxième interrogation si interrogé depuis 5 personnes au moins
+                    ok=true;
+                    this.interroges2.push(alea);
+                    // tout le monde a été interrogé 2 fois, on vide le cache
+                    if(this.interroges2.length === table.length)
+                        this.interroges2 = [];
+                }
+                if(breakafter500>500){console.error("oups");break;}
+            } while(!ok)
+            this.listeTirages.push(alea);
+        } else {
+            alea = Math.floor(Math.random() * table.length);
+        }
         // on ne prend que si la personne a voté (pour éviter les absents)
         document.getElementById("el" + table[alea]).className = "eleveevident";
         setTimeout(function () {
