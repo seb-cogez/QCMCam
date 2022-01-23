@@ -5,6 +5,9 @@ body{
 .cache {
     display: none;
 }
+.blur {
+  filter: blur(5px);
+}
 .text-green, .text-red{
     font-weight: bold;
 }

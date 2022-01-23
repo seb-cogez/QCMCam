@@ -1261,13 +1261,16 @@ var QCMeditors = {
      */
     toggleCacheQuestions: function (state) {
         var cache = document.getElementById('cacheQuestions');
+        let animate = document.getElementById("animate");
         // on récupère la taille du questionnaire pour lui donner sa taille
         var widthQ = document.getElementById('questions').offsetWidth;
         cache.style.width = widthQ + "px";
         if ((cache.className === "cache" && state === undefined) || state === "show") {
             cache.className = 'montre';
+            animate.classList.add("blur");
         } else {
             cache.className = 'cache';
+            animate.classList.remove("blur");
         }
     },
     /*
