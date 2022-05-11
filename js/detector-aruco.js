@@ -1975,9 +1975,9 @@ var QCMCam = {
             // au premier chargement si le navigateur est français, on ne touche à rien
             if (lang === "fr" && force === undefined) return false;
             // si la langue n'existe pas, on arrête.
-            if (["en", "es", "fr", "de"].indexOf(lang) < 0) {
+            if (["en", "es", "fr", "de","it"].indexOf(lang) < 0) {
                 lang = "fr";
-                alert('Your language is not suported, default is french.\n\nYou can switch to Spanish, English or German\nin the bottom.\n\nOr you can help translating. See Info');
+                alert('Your language is not supported, default is french.\n\nYou can switch to Spanish, English, Italian or German\nin the bottom.\n\nOr you can help translating. See Info');
                 return false;
             }
             // sinon, on teste l'existence des éléménts de Traduction
