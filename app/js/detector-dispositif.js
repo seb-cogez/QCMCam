@@ -510,6 +510,7 @@ var camera = {
             camera.videoPause = false;
             camera.scanner(true);
             camera.tick();
+            comm.action = "startscan";
             comm.intervalEnvoi = setTimeout(comm.sendDatas, 1800);
             document.getElementById("btn2").src = "img/128px/notphoto.png";
         }
@@ -897,7 +898,7 @@ var comm = {
         var json = {};
         json.dataR = {};
         if (comm.action !== "" && comm.action !== undefined) {
-            json.action = comm.action;
+            json.action = comm.action+"";
             comm.action = undefined; // on empêche un envoi futur de l'action.
             comm.attenteReponse = 1;
         }
@@ -992,7 +993,7 @@ var comm = {
                         q.qreponses = repjson.reps;
                         comm.donneesAenvoyer.updateReps = 1;
                     }
-                    if (["ended", "started", "nexted", "corrected", "reseted", "statsed"].indexOf(repjson.ok) > -1) {
+                    if (["ended", "started", "nexted", "corrected", "reseted", "statsed", "scanstarted"].indexOf(repjson.ok) > -1) {
                         if(repjson.ok === "nexted"){
                             if(q.qreponses[q.qFocusOn] !== undefined) {
                                 affichage.setOnBtnAnswer(q.qreponses[q.qFocusOn]);
@@ -1002,6 +1003,7 @@ var comm = {
                             camera.manualStopScan = false;              
                             camera.stopStartScan(false);
                         }            
+                        comm.attenteReponse = 0;
                         affichage.restoreButton();
                     } else if(comm.attenteReponse > 5){
                         comm.attenteReponse = 0;

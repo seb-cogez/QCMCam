@@ -894,6 +894,22 @@ var QCMeditors = {
         var pas = espaceToGo / 20;
         var pos = 0;
         utils.setChrono();
+        // on stocke les datas de la question précédente
+        qdatas[QCMeditors.qFocusOn] = datas;
+        // on cache les datas
+        datas =  {};
+        // on change le numéro de la question en cours.
+        if (direction === "l")
+            QCMeditors.qFocusOn++;
+        else if (direction === "r")
+            QCMeditors.qFocusOn--;
+        else if (direction === "last")
+            QCMeditors.qFocusOn = nbQ - 1;
+        else if (direction === "first")
+            QCMeditors.qFocusOn = 0;
+        answers.initAll();
+        answers.updateVotes();
+
         QCMeditors.interval = setInterval(frame, 1);
 
         function frame() {
@@ -906,23 +922,9 @@ var QCMeditors = {
                 if (camera.video !== false) {
                     camera.tick();
                 }
-                // on stocke les datas de la question précédente
-                qdatas[QCMeditors.qFocusOn] = datas;
-                // on change le numéro de la question en cours.
-                if (direction === "l")
-                    QCMeditors.qFocusOn++;
-                else if (direction === "r")
-                    QCMeditors.qFocusOn--;
-                else if (direction === "last")
-                    QCMeditors.qFocusOn = nbQ - 1;
-                else if (direction === "first")
-                    QCMeditors.qFocusOn = 0;
-                answers.initAll();
                 // s'il y a des datas enregistrés, on les affecte.
                 if (qdatas[QCMeditors.qFocusOn] !== undefined)
                     datas = qdatas[QCMeditors.qFocusOn];
-                else
-                    datas = {};
                 // si la bonne réponse a été proposée, on l'affiche
                 var reponseset = QCMeditors.updateNav();
                 answers.updateVotes();
@@ -3853,8 +3855,6 @@ var comm = {
                 document.getElementById('qrious').className = "cache";
                 document.getElementById("lienqr").innerHTML = "";
             }
-            // on enlève le cache gris des question si présent
-            QCMeditors.toggleCacheQuestions(true);
         }
         // on empêche la récupération de données si il y a eu un chamgement qui implique une réinitialisation des datas.
         if (json.nexted !== undefined) {
@@ -3910,7 +3910,11 @@ var comm = {
                 } else {
                     comm.cache.push(lesDatas.date);
                 }
-            if (lesDatas.action === "end") {
+            if(lesDatas.action === "startscan"){
+                // on enlève le cache gris des question si présent
+                QCMeditors.toggleCacheQuestions(true);
+                reponseAction = "scanstarted";
+            } else if (lesDatas.action === "end") {
                 reponseAction = "ended";
                 return true;
             } else if (lesDatas.action === "next") {
