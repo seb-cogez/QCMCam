@@ -1279,22 +1279,23 @@ var QCMeditors = {
      * Changer le type de réponse simple / multiple
      */
     changeTypeChoice: function (what) {
-        var btn = document.getElementById('btncc');
-        var elems = document.querySelectorAll("input[name='reponse']");
+        let btn = document.getElementById('btncc');
+        let elems = document.querySelectorAll("input[name='reponse']");
         // si les input sont de type radio, on commute pour checkbox;
         // et si on demande spécifiquement un checkbox on affiche.
         if ((what === undefined && elems[0].type === "radio") || what === "checkbox") {
             reponseSimple = false;
-            for (var i = 0; i < elems.length; i++) {
+            for (let i = 0; i < elems.length; i++) {
                 elems[i].type = "checkbox";
             }
             if (what === undefined || qreponses[QCMeditors.qFocusOn] === undefined) {
                 qreponses[QCMeditors.qFocusOn] = [];
-                for (var i = 0; i < elems.length; i++) {
+                for (let i = 0; i < elems.length; i++) {
                     if (elems[i].checked && i < 4) qreponses[QCMeditors.qFocusOn].push(elems[i].value);
                 }
             }
             btn.src = "css/img/32px/multiplechoice.png";
+            document.getElementById("editor"+QCMeditors.qFocusOn).classList.add("multiple");
         } else {
             reponseSimple = true;
             document.getElementById('revealanswer').className = "cache";
@@ -1308,6 +1309,7 @@ var QCMeditors = {
             if (what === undefined) {
                 delete qreponses[QCMeditors.qFocusOn];
             }
+            document.getElementById("editor"+QCMeditors.qFocusOn).classList.remove("multiple");
         }
     },
     setItemsiFrameDialog:function(dialog, evt){

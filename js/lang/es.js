@@ -1,28 +1,28 @@
 QCMCam.lang['es'] = {
   "generalPanel" : {
-    'logo': "QCMCam, QCM scanner con la webcam",
-    'startstop' : "Start/Stop la camara",
+    'logo': "QCMCam, escáner de QCM con la webcam",
+    'startstop' : "Activar/parar la camara",
     'smartphone' : 'Comenzar a escanear con un smartphone o una tableta (use Firefox en el dispositivo)',
     'changecam' : 'Cambiar cámara (se detectan varias cámaras)',
     'stopsmartphone':'Dejar de escanear con el smartphone',
     'help' : '¿Cómo empezar?',
     'about' : 'Sobre el sitio web',
     'library' : 'Acceder a la biblioteca de QCMCam',
-    'group':'Groupo',
+    'group':'Grupo',
     'usersload' : 'Cargar participantes desde el ordenador',
     'userstoggleedit' : 'Editar la lista de participantes.',
     'fullscreen' : 'Pantalla completa (ALT+Z)',
     'usersempty' : 'Vaciar la lista de participantes.',
-    'usersadd' : 'Adición de participantes',
+    'usersadd' : 'Añadir participantes',
     'usersdelete' : 'Eliminar participantes',
     'usersedit' : 'Editar los nombres y números de los participantes.',
     'usersdownload': 'Descarguar los participantes mostrados en el ordenador',
-    'userspaste' : 'Peguar sus listas de la hoja de cálculo aquí',
+    'userspaste' : 'Pegar sus listas de la hoja de cálculo aquí',
     'pastehere' : 'Pegar aquí',
-    'groupsdownload' : 'Descarga los grupos a tu ordenador',
+    'groupsdownload' : 'Descargar los grupos a su ordenador',
     'restoredefault' :'Restaurar grupos predeterminados',
     'userssavelists' : 'Grabar la lista de grupos',
-    'setFullHD' : 'Inicia la cámara web en modo Full HD (si es compatible)',
+    'setFullHD' : 'Activar la cámara web en modo Full HD (si es compatible)',
     'source': 'Codigo en github'
   },
   "navigationPanel":{
@@ -37,9 +37,9 @@ QCMCam.lang['es'] = {
     'answerC' : 'respuesta C',
     'answerD' : 'respuesta D',
     'showstats' : 'Ver estadísticas de respuesta (ALT+V)',
-    'showcorrectanswer' : 'Muestra la respuesta correcta a la pregunta (cuando se graba)',
-    'tableofanswers' : 'Cuadro general de respuestas',
-    'answersreset' : 'Restablecer las respuestas a cero'
+    'showcorrectanswer' : 'Muestra la respuesta correcta a la pregunta (después de guardarla)',
+    'tableofanswers' : 'Tabla general de respuestas',
+    'answersreset' : 'Reiniciar las respuestas'
   },
   "questions" :{
     'addquestion' : 'Añadir una pregunta',
@@ -52,22 +52,22 @@ QCMCam.lang['es'] = {
     'movetoright' : 'Mover la pregunta a la derecha',
     'deletequestion' : 'Eliminar pregunta',
     'deleteallquestions' : 'Eliminar todas las preguntas',
-    'downloadquestions' : 'Descargar preguntas a tu computadora',
+    'downloadquestions' : 'Descargar preguntas a su computadora',
     'thegoodanswer': 'Respuesta correcta',
     'noanswer': 'sin respuesta',
     'defaultquestion': 'Primera pregunta',
     'clickwhenready' : 'Haga clic aquí cuando esté listo',
     'bottommessage': 'Haga clic y arrastre para cambiar el tamaño',
-    'changetypechoice':"conmutador respuesta única/respuesta múltiple",
+    'changetypechoice':"Invertir respuesta única/respuesta múltiple",
     'timetoanswer':"Tiempo para responder",
     'pasteurl':"o dirección web",
     'pastehere':"Pegar aquí"
   },
   "startPanel":{
-    'startdescription' : "la aplicación web a <b>sondear</b> con una <b>cámara web</b> o un smartphone",
+    'startdescription' : "la aplicación web para <b>sondear</b> con una <b>cámara web</b> o un smartphone",
     'licence':'licencia <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>',
     'demo' : 'Demostración',
-    'titleinfo':"Todo lo que necesitas saber sobre esta aplicación",
+    'titleinfo':"Todo lo que necesita saber sobre esta aplicación",
     'info' : 'Información sobre el sitio',
     'source':'Código fuente y comunidad',
     'titleyoutube':"Ir al canal Youtube de QCMcam.net",
@@ -79,27 +79,27 @@ QCMCam.lang['es'] = {
     'titlegenerator':"Acceda al generador de marcadores si ha perdido el suyo",
     'generator' : 'Generador de marcadores',
     'smartphone': 'Dirección para el smartphone',
-    'noneedqrscan':'No hay necesidad de un lector de QRCode, escanea desde la página.',
+    'noneedqrscan':'No se necesita lector de QRCode, escanee desde la página.',
     'raspberry':'Imagen de disco para el Raspberry Pi',
     'raspberry2': 'hecha por Johannes Holstein',
     'mailto':'Preguntas o comentarios'
 },
   "usersPanel":{
-    'interrogatewrong' : 'Designar a un participante que votó mal',
-    'interrogatetrue' : 'Designar a un participante que votó corecto',
+    'interrogatewrong' : 'Designar a un participante que ha contestado mal',
+    'interrogatetrue' : 'Designar a un participante que ha contestado correctamente',
     'interrogaterandom' : 'Designar a un participante al azar',
     'deleteabsentees' : 'Eliminar usuarios que no han respondido',
     'toggleusersnames' : 'Ocultar/mostrar nombres',
-    'userseditionmessage' : 'Haga clic en los números o Nombres para cambiarlos. <br />Precaución de no dejar un <b>doble número</b> al salir del modo de edición.',
+    'userseditionmessage' : 'Haga clic en los números o Nombres para cambiarlos. <br />Cuidado con no dejar un <b>doble número</b> al salir del modo de edición.',
     'restoreDefaults' : 'Está a punto de restaurar los grupos predeterminados. ¿ Lo confirmas ?'
   },
   "messages" : {
     'cameralist':"lista de cámaras detectadas",
     'onedetectedcam' : '<b>Una sola cámara</b> detectada, haga clic en <img src="css/img/32px/camera-web.png" onclick="camera.start();" /> para mostrar la imagen. <br />O click <img src="css/img/32px/camera-refresh.png" onclick="camera.detect();" /> después de conectar otra.',
-    'manycam' :'<b>Muchas cámaras</b> detectadas, la 2ª es la que se utiliza por defecto, puede cambiar haciendo clic en <img src="css/img/32px/gnome-session-switch.png" /> una vez que la imagen se muestre. También puede seleccionar directamente el que desee utilizar: <br />',
+    'manycam' :'<b>Varias cámaras</b> detectadas, la 2ª es la que se utiliza por defecto, puede cambiar haciendo clic en <img src="css/img/32px/gnome-session-switch.png" /> una vez que la imagen se muestre. También puede seleccionar directamente el que desee utilizar: <br />',
     'nocamdetected':'<b>No hay cámara </b>detectado, puede reiniciar la detección haciendo clic en <img src="css/img/32px/camera-refresh.png" onclick="camera.detect();" /> después de conectar una.<br>También puede usar un dispositivo externo haciendo clic en <img src="css/img/32px/phone.png" onclick="comm.loadSession();" />.',
-    "deleteabsentees":"¿Quieres borrar los ausentes?",
-    "nothingtoedit":"No hay elementos a editar.",
+    "deleteabsentees":"¿Quieres eliminar los ausentes?",
+    "nothingtoedit":"No hay elemento a editar.",
     'twicenumber':"El número {} se utiliza varias veces! cambie el valor antes de continuar.",
     'nostudent':"No hay estudiantes en el grupo {}",
     'noclass':"Ningún grupo a mostrar",
@@ -108,13 +108,13 @@ QCMCam.lang['es'] = {
     'participant':"Participante",
     "groupmusthave":"Tienes que cargar una clase antes de \npoder entrevistar a un estudiante al azar.",
     "nogroup":"No hay grupo para descargar.",
-    "goodanswer":"Buena respuesta",
+    "goodanswer":"Respuesta correcta",
     "groupneeded":"Debe haber importado una clase y preguntas antes de iniciar el escaneo.",
     "connexionestablished":"Conexión establecida con el dispositivo.",
     "connexionfailed":"Fallo en la conexión al servidor",
     "deconnectionSmartphone":"Desconectado del smartphone",
     "connexionclosed":"conexión cerrada",
-    "confirmbeforestart":'Sólo se propone una pregunta, continuar ?\n(no : Cancelar, sí : OK)',
+    "confirmbeforestart":'Sólo se propone una pregunta, ¿ continuar ?\n(no : Cancelar, sí : OK)',
     'goodanswermusthave':"Debe haber indicado la respuesta correcta para esto.",
     "importgroups":"importación de grupos realizada : "
   },
@@ -122,7 +122,7 @@ QCMCam.lang['es'] = {
     'text': `<p><img src="css/img/QCMCam-logo.png" title="QCMCam, escáner QCM con webcam" alt="QCMCam logo" /> Logo, creación y adaptaciones por <a href="mailto:sebastien.cogez@gmail.com">S. COGEZ</a> - Colegio OLIBO en St Cyprien.<br />
     Copyright 2019 Sébastien COGEZ licencia <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></p>
     <p>Este software se desarrolla de forma experimental. Ha habido muchos cambios desde que se puso en línea por primera vez en junio de 2017. La última importante se realizó el 20/08/2018 cuando los marcadores básicos (4x4) utilizados para votar fueron
-      cambiado.
+      cambiados.
       Por lo tanto, será necesario imprimirlos de nuevo para aquellos que tengan juegos antiguos. Este cambio se debe a problemas de falsos positivos en la votación en clase. Espero no tener que volver sobre esto en el futuro. <br />
       Si desea compartir sus cuestionarios a través de la biblioteca, o solicitar mejoras al software, por favor escríbame.</p>
     <p><img src="css/img/32px/info.png" alt="Información adicional" />El QRVote se lee usando una webcam o un smartphone/tablet. <br />Un tuto es directamente accesible haciendo clic en el icono de "vía de escape". </p>

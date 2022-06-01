@@ -1,0 +1,1 @@
+vitesse, r&eacute;flexion, r&eacute;fraction, lentille convergente, dispersion

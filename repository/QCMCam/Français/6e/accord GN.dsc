@@ -1,0 +1,1 @@
+Pour r&eacute;viser rapidement f&eacute;minin/masculin des noms et adjectifs 

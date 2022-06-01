@@ -1,0 +1,1 @@
+QCM rapide de 5 questions pour v&eacute;rifier la capacit&eacute; &agrave; identifier les types de discrimination.

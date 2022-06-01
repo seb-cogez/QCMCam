@@ -1,0 +1,1 @@
+calcul de moyennes et compr&eacute;hension de la formule.

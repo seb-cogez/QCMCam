@@ -248,6 +248,10 @@ span.supprButton{
     float: left;
     border: 1px solid #CCC;
 }
+.question.multiple::before {
+  content: url(./img/multicheck.png);
+  float: right;
+}
 #questionsContener{
     overflow: hidden;
     width: 100%;

@@ -1,0 +1,2 @@
+7 multiplications
+Calcul mental

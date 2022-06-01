@@ -1,0 +1,1 @@
+Une seule phrase est correcte.

@@ -1,0 +1,1 @@
+4 questions: calculs de terme et reconnaitre le mode de generation
