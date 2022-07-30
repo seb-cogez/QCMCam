@@ -70,8 +70,8 @@ QCMCam.lang['es'] = {
     'titleinfo':"Todo lo que necesita saber sobre esta aplicación",
     'info' : 'Información sobre el sitio',
     'source':'Código fuente y comunidad',
-    'titleyoutube':"Ir al canal Youtube de QCMcam.net",
-    'youtube' : 'canal de Youtube',
+    'titleyoutube':"Ir al canal PeerTube de QCMcam.net",
+    'youtube' : 'canal de PeerTube',
     'titlemarkers':"Descargar marcadores para jugar con QCMCam",
     'markers' : 'Marcadores de formato A4',
     'titledocumentation':"Descargar la documentación",
@@ -155,7 +155,7 @@ QCMCam.lang['es'] = {
         <li>Francés <a href="js/lang/fr.js">Archivo fr.js</a> este archivo, ya que uno de los otros puede permitirle empezar a traducir a otro idioma.</li>
       </ul>
       Enlaces directos para favoritos : <a href="index.html?lang=es">Castellano</a> | <a href="index.html?lang=en">Inglés</a> | <a href="index.html?lang=de">Alemán</a> | <a href="index.html?lang=fr">Francés</a>
-    <p> <p><img src="css/img/32px/film.png" alt="Tutos online" /> <a href="https://www.youtube.com/playlist?list=PLY0c0egMElYOuip9op8_805Iwl7TtEVae" target="_blank" rel="no openener">Videos to learn</a> how to use QCMCam</p>
+    <p> <p><img src="css/img/32px/film.png" alt="Tutos online" /> <a href="https://tube-numerique-educatif.apps.education.fr/w/p/1iP6p5WAzH9TWZF5DPX3YG" target="_blank" rel="no openener">Videos to learn</a> how to use QCMCam</p>
     <p><img src="css/img/32px/trombone.png" alt="Files to print" /> Los marcadores se distribuirán a los participantes según el número indicado en la solicitud.
       Puede elegir entre: </p>
     <ul>

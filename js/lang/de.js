@@ -70,8 +70,8 @@ QCMCam.lang['de'] = {
     'titleinfo':"Alles, was du über diese App wissen musst.",
     'info' : 'Informationen auf der Website',
     'source':'Quellcode und Community',
-    'titleyoutube':"Auf den QCMCam.net Youtube-Kanal zugreifen",
-    'youtube' : 'Youtube Kanal',
+    'titleyoutube':"Auf den QCMCam.net PeerTube-Kanal zugreifen",
+    'youtube' : 'PeerTube Kanal',
     'titlemarkers':"Markierungen herunterladen, um mit QCMCam zu spielen.",
     'markers' : 'Markierer im A4-Format',
     'titledocumentation':"Dokumentation herunterladen",
@@ -156,7 +156,7 @@ QCMCam.lang['de'] = {
       </ul>
       Direkte Links für Lesezeichen : <a href="index.html?lang=es">Spanisch</a> | <a href="index.html?lang=en">Englisch</a> | <a href="index.html?lang=de">Deutsch</a> | <a href="index.html?lang=fr">Französisch</a>
     </p>
-    <p><img src="css/img/32px/film.png" alt="Tutos online" /> <a href="https://www.youtube.com/playlist?list=PLY0c0egMElYOuip9op8_805Iwl7TtEVae" target="_blank" rel="noopener">Videos zum Lernen</a> wie man QCMCam benutzt</p>
+    <p><img src="css/img/32px/film.png" alt="Tutos online" /> <a href="https://tube-numerique-educatif.apps.education.fr/w/p/1iP6p5WAzH9TWZF5DPX3YG" target="_blank" rel="noopener">Videos zum Lernen</a> wie man QCMCam benutzt</p>
     <p><img src="css/img/32px/trombone.png" alt="Dateien zum Drucken" /> Die Markierungen sind an die Teilnehmer entsprechend der in der Anmeldung angegebenen Anzahl zu verteilen.
       Sie können wählen zwischen: </p>
     <ul>

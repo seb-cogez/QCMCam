@@ -70,8 +70,8 @@ QCMCam.lang['en'] = {
     'titleinfo':"Everything you need to know about this app",
     'info' : 'Site Information on the website',
     'source':'Source code and community',
-    'titleyoutube':"Go to the QCMcam.net's Youtube channel",
-    'youtube' : 'Youtube channel',
+    'titleyoutube':"Go to the QCMcam.net's PeerTube channel",
+    'youtube' : 'PeerTube channel',
     'titlemarkers':"Download markers to play with QCMCam",
     'markers' : 'A4 format markers',
     'titledocumentation':"Download documentation",
@@ -156,7 +156,7 @@ QCMCam.lang['en'] = {
       </ul>
       Direct links for bookmarks : <a href="index.html?lang=es">Spanish</a> | <a href="index.html?lang=en">English</a> | <a href="index.html?lang=de">German</a> | <a href="index.html?lang=fr">French</a>
     </p>
-    <p><img src="css/img/32px/film.png" alt="Tutos online" /> <a href="https://www.youtube.com/playlist?list=PLY0c0egMElYOuip9op8_805Iwl7TtEVae" target="_blank" rel="noopener">Videos to learn</a> how to use QCMCam</p>
+    <p><img src="css/img/32px/film.png" alt="Tutos online" /> <a href="https://tube-numerique-educatif.apps.education.fr/w/p/1iP6p5WAzH9TWZF5DPX3YG" target="_blank" rel="noopener">Videos to learn</a> how to use QCMCam</p>
     <p><img src="css/img/32px/trombone.png" alt="Files to print" /> The markers are to be distributed to participants according to the number indicated in the application.
       You can choose between: </p>
     <ul>

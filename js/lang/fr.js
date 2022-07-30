@@ -81,8 +81,8 @@ QCMCam.lang['fr'] = {
     'titlegenerator':"Accéder au générateur de marqueur si vous avez perdu le vôtre",
     'titleinfo':"Tout ce qu'il faut savoir sur cette appli",
     'titlemarkers':"Télécharger les marqueurs pour jouer avec QCMCam",
-    'titleyoutube':"Accéder à la chaine Youtube de QCMCam.net",
-    'youtube' : 'Chaine Youtube'
+    'titleyoutube':"Accéder à la chaine PeerTube de QCMCam.net",
+    'youtube' : 'Chaine PeerTube'
   },
   "usersPanel":{
     'interrogatewrong' : 'Désigner un participant ayant voté faux',
@@ -155,7 +155,7 @@ QCMCam.lang['fr'] = {
         <li>Français <a href="js/lang/fr.js">Fichier fr.js</a> ce fichier, comme l'un des autres peut vous permettre de vous lancer dans la traduction dans une autre langue.</li>
       </ul>
       Liens directs à mettre dans les marque page : <a href="index.html?lang=es">Espagnol</a> | <a href="index.html?lang=en">Anglais</a> | <a href="index.html?lang=de">Allemand</a> | <a href="index.html?lang=fr">Français</a>
-    </p>    <p><img src="css/img/32px/film.png" alt="Tutos en ligne" /> <a href="https://www.youtube.com/playlist?list=PLY0c0egMElYOuip9op8_805Iwl7TtEVae" target="_blank" rel="noopener">Vidéos pour apprendre</a> à se servir de QCMCam</p>
+    </p>    <p><img src="css/img/32px/film.png" alt="Tutos en ligne" /> <a href="https://tube-numerique-educatif.apps.education.fr/w/p/1iP6p5WAzH9TWZF5DPX3YG" target="_blank" rel="noopener">Vidéos pour apprendre</a> à se servir de QCMCam</p>
     <p><img src="css/img/32px/trombone.png" alt="Fichiers à imprimer" /> Les marqueurs sont à distribuer aux participants selon le numéro indiqué dans l'application.
       Vous avez le choix entre :</p>
     <ul>
