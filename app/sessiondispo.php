@@ -15,7 +15,7 @@ if (htmlspecialchars($_GET['s']) === "") {
 } else {
     // un petite protection de rien du tout
     $idsession = htmlspecialchars($_GET['s']);
-    if (!isset($_SESSION[idsession])) {
+    if (!isset($_SESSION['idsession'])) {
         $_SESSION['idsession'] = $idsession;
         $_SESSION['app'] = false;
     } elseif ($idsession !== $_SESSION['idsession']) {
