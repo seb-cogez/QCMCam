@@ -1897,7 +1897,9 @@ var utils = {
         utils.now = Date.now();
         utils.endChrono = utils.now + utils.convertTimeToms(QCMeditors.times[QCMeditors.qFocusOn]);
         utils.duree = utils.endChrono - utils.now;
-        document.getElementById("chronorect").style.width = "100%";
+        let barre = document.getElementById("chronorect");
+        barre.style.width = "100%";
+        barre.style.backgroundColor = null;
         utils.intervalChrono = setInterval(utils.checkTime, 100);
     },
     /*
