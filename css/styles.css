@@ -497,14 +497,15 @@ span.supprButton{
 #tableau th {
     cursor: pointer;
 }
-ol {
+/* hors tableau */
+.question > ol {
     counter-reset: li;
 }
-ol > li {
+.question > ol > li {
     list-style-type: none;
     margin-bottom: 16px;
 }
-ol > li::before {
+.question > ol > li::before {
     display: inline-block;
     counter-increment: li;
     content: counter(li, upper-alpha) ". ";
@@ -512,6 +513,30 @@ ol > li::before {
     margin-right: 3px;
     cursor: pointer;
     font-weight: bold;
+}
+/* dans tableau */
+table {
+  counter-reset: li;
+}
+table ol {
+  padding:20px;
+}
+table li {
+  list-style-type: none;
+  margin-bottom: 16px;
+}
+table li::before {
+  display: inline-block;
+  counter-increment: li;
+  content: counter(li, upper-alpha) ". ";
+  padding: 4px;
+  margin-right: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.cke_editable .rondvert::before, .corrige .rondvert::before{
+  border-radius:20px 20px 20px 20px;
+  border:3px solid green;
 }
 #progressdiv {
   position:absolute;

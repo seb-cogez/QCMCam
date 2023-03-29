@@ -564,17 +564,18 @@ var QCMeditors = {
     checkAnswer:function(evt){
         if(evt.target.parentNode.nodeName.toLowerCase() != "ol" || evt.target.nodeName.toLowerCase() != 'li') return false;
         // check if floating image present
-        var deltax=0,imgBox,objBox=evt.target.getBoundingClientRect(),elt=null,imgOutOL=true,first=true;
-        var offset = objBox.left,
+        let deltax=0,imgBox,objBox=evt.target.getBoundingClientRect(),elt=null,imgOutOL=true,first=true;
+        let offset = objBox.left,
             sizeIndex = parseInt(window.getComputedStyle(evt.target, ':before').width);
-        var imgs = document.querySelectorAll("#editor"+QCMeditors.qFocusOn+ " img");
-        for (var i=0;i<imgs.length;i++){
+        let imgs = document.querySelectorAll("#editor"+QCMeditors.qFocusOn+ " img");
+        // prise de tête pour calculer l'emplacement du clic en cas de présence d'image flottante
+        for (let i=0;i<imgs.length;i++){
             imgBox = imgs[i].getBoundingClientRect();
             if(imgBox.left<=offset && objBox.bottom>imgBox.top && imgBox.bottom>objBox.top){
                 if(imgBox.width>deltax)
                     deltax += imgBox.width;
                 elt = imgs[i].parentElement;
-                for(var j=0;j<3;j++){
+                for(let j=0;j<3;j++){
                     elt = elt.parentElement;
                     if(elt.nodeName.toLocaleLowerCase() === "li"){
                         deltax += first?offset:0;
@@ -587,10 +588,25 @@ var QCMeditors = {
                 first=false;
             }
         }
-        var lettres=["A","B","C","D"];
-        var x = evt.clientX;
-        var value = Array.prototype.indexOf.call(evt.target.parentNode.children,evt.target);
-        var checkboxradio = document.getElementById('R'+lettres[value]);
+        let lettres=["A","B","C","D"];
+        let x = evt.clientX;
+        // recherche d'un tableau avec un élément li
+        let tableIsPresent = document.querySelector("#editor"+QCMeditors.qFocusOn+" table li");
+        let value;
+        // place du target dans son parent ol
+        if(tableIsPresent === null){
+            value = Array.prototype.indexOf.call(evt.target.parentNode.children,evt.target);
+        } else {
+        // place du target dans le tableau (si tableau)
+        let cellsTable = document.querySelectorAll("#editor"+QCMeditors.qFocusOn+" table li");
+            let i=0;
+            for(let len=cellsTable.length;i<len;i++){
+                if(cellsTable[i]===evt.target)
+                    break;
+            }
+            value = i;
+        }
+        let checkboxradio = document.getElementById('R'+lettres[value]);
         if(x -30 - (deltax?deltax:offset) < 0){
             checkboxradio.click();
         }
@@ -1112,14 +1128,22 @@ var QCMeditors = {
      * @returns {undefined}
      */
     addStyle: function (questionNumber) {
+        let liInOl = document.querySelectorAll("#editor"+questionNumber+".question > ol li");
+        if(liInOl.length>0){
+            liInOl.forEach(el=>{el.classList.remove("rondvert")});
+        }
+        let liInTable = document.querySelectorAll("#editor"+questionNumber+" table li");
+        if(liInTable.length>0){
+            liInTable.forEach(el=>{el.classList.remove("rondvert")});
+        }
         if(qreponses[questionNumber] === undefined){
-            QCMeditors.removeStyle(questionNumber);
+            //QCMeditors.removeStyle(questionNumber);
             return false;
         }
         var s = [],se=null;
-        if (document.getElementById("stylesheet" + questionNumber) !== null) {
+        /*if (document.getElementById("stylesheet" + questionNumber) !== null) {
             se = document.getElementById("stylesheet" + questionNumber);
-        }
+        }*/
         if (qreponses[questionNumber].indexOf("A") > -1)
             s.push(1);
         if (qreponses[questionNumber].indexOf("B") > -1)
@@ -1128,31 +1152,38 @@ var QCMeditors = {
             s.push(3);
         if (qreponses[questionNumber].indexOf("D") > -1)
             s.push(4);
-        if (!s.length) {
+        /*if (!s.length) {
             QCMeditors.removeStyle(questionNumber);
             return false;
-        }
-        var sheet = document.createElement('style');
-        sheet.id = "stylesheet" + questionNumber;
+        }*/
+        //var sheet = document.createElement('style');
+        //sheet.id = "stylesheet" + questionNumber;
         for (var i = 0; i < s.length; i++) {
-            sheet.innerHTML += "#editor" + questionNumber + " ol > li:nth-child(" + s[i] + ")::before{border-radius:20px 20px 20px 20px;border:3px solid green;}";
+            if(liInOl.length>0){
+                liInOl[s[i]-1].classList.add("rondvert");
+            }
+            if(liInTable.length>0){
+                liInTable[s[i]-1].classList.add("rondvert");
+            }
         }
+        /*
         if(stylesheets[questionNumber]){
             document.body.replaceChild(sheet,se);
         } else {
             document.body.appendChild(sheet);
         }
-        stylesheets[questionNumber] = "sstylesheet" + questionNumber;
+        stylesheets[questionNumber] = "sstylesheet" + questionNumber;*/
     },
     /*
      *  Enlève les feuilles de styles créées dynamiquement précédemment
      */
     removeStyle: function (questionNumber) {
-        var sheet = document.getElementById("stylesheet" + questionNumber);
+        /*var sheet = document.getElementById("stylesheet" + questionNumber);
         if(!sheet) return false;
         var sheetParent = sheet.parentNode;
         sheetParent.removeChild(sheet);
-        delete stylesheets[questionNumber];
+        delete stylesheets[questionNumber];*/
+        return true;
     },
     /*
      * télécharge un fichier distant dans QCMCam
@@ -2717,9 +2748,8 @@ var answers = {
     resetAll: function () {
         this.initAll();
         var i;
-        for (i in stylesheets) {
-            QCMeditors.removeStyle(i);
-        }
+        // on déaffiche le corrigé
+        document.querySelectorAll(".question").forEach(el=>{el.classList.remove("corrige")});
         qdatas = {};
         this.scores={};
         // en cas de gestion avec le portable
@@ -2992,6 +3022,7 @@ var answers = {
         this.showResponses(qreponses[QCMeditors.qFocusOn]);
         this.compteValeurs(qreponses[QCMeditors.qFocusOn]);
         QCMeditors.addStyle(QCMeditors.qFocusOn);
+        this.giveGoodAnswer()
         if(arguments[1] === false)return;// on évite de communiquer si on a reçu le changement de réponse par le device
         if (comm.sessionId > 0 || comm.peerId !== false) {
             reponsesChangeDetected = true;
@@ -3047,6 +3078,7 @@ var answers = {
         this.showResponses(value);
         this.compteValeurs(value);
         QCMeditors.addStyle(QCMeditors.qFocusOn);
+        document.getElementById("editor"+QCMeditors.qFocusOn).classList.add("corrige");
     },
     /*
      * fillTable : remplit la variable qexport et
@@ -4376,7 +4408,7 @@ function onLoad() {
             case "AudioVolumeDown": // VolumeDown || commande laser
                 preventDouble(182);
                 break;
-            case "F5":// F5 :(
+            case "F6":// F6 :(
                 camera.scanner();
             }
             evt.preventDefault();

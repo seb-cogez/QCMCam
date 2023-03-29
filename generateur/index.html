@@ -18,14 +18,16 @@
         </style>
     </head>
     <body>
-        <h1 style="font-size:1.3em; text-align:center;" class="noprint"><img align="center" src="../css/img/QCMCam-logo.png" /> Générateur de marqueur Aruco 4×4</h1>
+        <h1 style="font-size:1.3em; text-align:center;" class="noprint"><img align="center" src="../css/img/QCMCam-logo.png" /> Générateur de marqueur Aruco 4 bits</h1>
         <div class="noprint">
             Numéro du marqueur à générer : 
             <input type="button" value="Générer marqueur n° :" onclick="genereMarker();">
             <input type="number" min="1" max="60" step="1" name="valeur" id="mid" style="width:3em;" value="1">
             <- de à -> <input type="number" min="2" max="60" step="1" name="valeurmax" id="maxid" style="width:3em;" value="2"><input type="button" value="Générer intervalle" onClick="generate();">
             Couleur des lettres : <input type="color" onchange="setColor(this.value);" defaultValue='#E0E0E0' id="colorsetter"><br />
-            <i style="font-size: 0.8em;">Changer le 1er numéro et cliquer sur Générer marqueur n° pour créer un seul marqueur. Changer les 2 numéros et cliquer sur Générer intervalle pour créer tous les marqueurs du 1er au 2e nombre.</i>
+            <i style="font-size: 0.8em;">Changer le 1er numéro et cliquer sur Générer marqueur n° pour créer un seul marqueur. Changer les 2 numéros et cliquer sur Générer intervalle pour créer tous les marqueurs du 1er au 2e nombre.</i><br>
+            Pour créer des marqueurs nominatifs, importer, puis sélectionner la classe : <input type='file' id="file" accept='text/plain' onchange='users.openFile(event)' title="Charger les élèves depuis son ordinateur" class="inputfile" data-translate='{"title":"generator.users.import"}' /><select id="classes"><option value="0" title="Importer d'abord des classes pour  pouvoir générer des fichiers nomminatifs">Importer un fichier</option></select><br>
+            <div id="listeeleves"></div>
         </div>
         <script>
             var p4 = {106: 1, 107: 2, 110: 3, 111: 4, 122: 5, 123: 6, 126: 7, 127: 8, 154: 9, 155: 10, 158: 11, 159: 12, 166: 13, 167: 14, 169: 15, 142: 16, 171: 17, 173: 18, 174: 19, 175: 20, 182: 21, 183: 22, 185: 23, 186: 24, 187: 25, 189: 26, 190: 27, 191: 28, 218: 29, 219: 30, 222: 31, 223: 32, 230: 33, 231: 34, 233: 35, 234: 36, 235: 37, 237: 38, 238: 39, 239: 40, 246: 41, 247: 42, 249: 43, 250: 44, 251: 45,
@@ -52,48 +54,171 @@
                         genereMarker(i, true);
                 }
             };
-            function genereMarker(id, letsgo) {
-                if (id === undefined)
-                    id = Number(document.getElementById("mid").value);
-                if (Number(id) > 90 || Number(id) <= 0) {
-                    alert('Numéro non valide, il faut un nombre entre 1 et 90');
-                    return false;
-                }
-                var tid = correspondances[id];
-                var width = 600, height = 600;
-                [canvas, blancs] = makeMarker(tid, width, height);
-                var ctx = canvas.getContext('2d');
-                // style of the letters A, B, C and D
-                ctx.font = "bold 38px sans-serif";
-                ctx.fillStyle = lettersColor;
-                ctx.save();
-                var lettres = ["A", "B", "C", "D"];
-                for (let i = 0; i < 4; i++) {
-                    ctx.textAlign = "center";
-                    ctx.fillText(lettres[i], canvas.width / 2, 65);
-                    if (i === 0) {
-                        ctx.textAlign = "end";
-                        ctx.fillText(id, 670, 65);
+            
+            var users = {
+                // supprMode : false ou true, selon que l'on est en mode suppression des utilisateurs par clic ou non
+                supprMode: false,
+                absents: {},
+                college: {},
+                classe: null,
+                eleves: {},
+                /*
+                * importe les données dans la variable college
+                * @param (String) liste : une chaine de type tableur obetnue par copier/coller
+                */
+                import: function (liste) {
+                    users.classe = null;
+                    var withClasses = false;
+                    var nomsClasses = [];
+                    var compteurIds = 1;
+                    var lines = liste.split(/[\r\n]+/g); // pour que ça marche à partir de fichiers créés avec des systèmes différents de Windows.
+                    users.college.uploaded = {
+                        effectif: 0
+                    };
+                    for (var i = 0; i < lines.length; i++) {
+                        if (lines[i].trim() === "")
+                            continue; // ligne vide
+                        var text = lines[i].split("\t");
+                        if (text.length === 3) { // 3e colonne = classe
+                            withClasses = true;
+                            if (nomsClasses.indexOf(text[2].trim()) < 0) {
+                                nomsClasses.push(text[2].trim());
+                                users.college[text[2].trim()] = {};
+                                users.college[text[2].trim()].effectif = 0;
+                            }
+                            users.college[text[2].trim()][text[0].trim()] = text[1].trim();
+                            users.college[text[2].trim()].effectif++;
+                        } else if (text.length === 1) {
+                            //on imagine une liste de noms sans numéro
+                            users.college.uploaded[compteurIds++] = text[0].trim();
+                            users.college.uploaded.effectif++;
+                        } else {
+                            // les numéros sont fournis
+                            users.college.uploaded[text[0].trim()] = text[1].trim();
+                            users.college.uploaded.effectif++;
+                        }
                     }
-                    ctx.translate(canvas.width / 2, canvas.height / 2);
-                    ctx.rotate(Math.PI / 2);
-                    ctx.translate(-canvas.width / 2, -canvas.height / 2);
-                }
-                ctx.restore();
-                document.getElementById("markercanvas").innerHTML = canvas;
-                var img = document.createElement("IMG");
-                img.src = canvas.toDataURL("image/png");
-                var pngcont = document.getElementById("png-container");
-                if (letsgo !== undefined) {
-                    pngcont.appendChild(img);
-                    pngcont.innerHTML += '<DIV STYLE="page-break-before:always"></DIV>';
-                } else {
-                    while (pngcont.firstChild) {
-                        pngcont.removeChild(pngcont.firstChild);
+                    if (withClasses) {
+                        // suppression des classes qui ne sont pas dans la liste des classes chargées
+                        for (var classe in users.college) {
+                            if (nomsClasses.indexOf(classe) < 0) {
+                                delete users.college[classe];
+                            }
+                        }
+                        /*if (utils.storageAvailable('localStorage')) { // on stocke les données localement pour les retrouver à la prochaine ouverture de page
+                            localStorage.college = JSON.stringify(users.college);
+                        }*/
                     }
-                    pngcont.appendChild(img);
-                }
+                    users.peuplerSelectClasses("new");                       
+                },    /*
+     * Création du select des groupes d'utilisateurs
+     * @param (String) action : "new" -> charge les classes qui ne sont pas celles par défaut
+     *                          "basic" -> charge les classes par défaut
+     */
+    peuplerSelectClasses: function (action) {
+        var message="";
+        if(action === "new")
+            message = "Import des groupes ";//QCMCam.lang[lang]['messages']['importgroups']+"<ul>";
+        var x = document.getElementById("classes"),
+            option, nomClasse;
+        var opts = x.getElementsByTagName('option');
+        // on vide le select
+        while (opts[0]) {
+            x.removeChild(opts[0]);
+        }
+        let opt = document.createElement("option");
+        opt.value = 0;
+        opt.text = "Sélectionner la classe pour attribuer les noms";
+        x.add(opt);
+        // on remplit avec les noms de classes
+        for (nomClasse in users.college) {
+            if ((action === "new" || action === "fromMemory") || (action === "basic" && nomClasse !== "uploaded")) {
+                option = document.createElement("option");
+                option.text = nomClasse;
+                option.value = nomClasse;
+                x.add(option);
+                message += "<li>"+nomClasse+"</li>";
             }
+        }
+        // on prévient que l'opération est terminée.
+        if(action === "new"){
+            message += "</ul>";
+            document.getElementById("listeeleves").innerHTML = message;
+            //utils.afficheAccueil(false);
+            }
+        },
+        /*
+        * charge le fichier donné en paramètre du champ input (event)
+        */
+        openFile: function (event) {
+            // le fichier est un txt avec lignes au format Numero\tNom[\tclasse] ou Nom seul
+            var input = event.target;
+            var reader = new FileReader();
+            reader.onload = function () {
+                users.import(reader.result);
+            };
+            reader.readAsText(input.files[0]);
+            }
+        }
+        function genereMarker(id, letsgo) {
+            document.getElementById("listeeleves").innerHTML = "";
+            let selectedOption = document.getElementById("classes").value;
+            users.classe = null;
+            if(users.college[selectedOption] !== undefined){
+                // une classe est sélectionnée.
+                users.classe = users.college[selectedOption];
+            }
+            if (id === undefined)
+                id = Number(document.getElementById("mid").value);
+            if (Number(id) > 90 || Number(id) <= 0) {
+                alert('Numéro non valide, il faut un nombre entre 1 et 90');
+                return false;
+            }
+            var tid = correspondances[id];
+            var width = 600, height = 600;
+            [canvas, blancs] = makeMarker(tid, width, height);
+            var ctx = canvas.getContext('2d');
+            // style of the letters A, B, C and D
+            ctx.font = "bold 38px sans-serif";
+            ctx.fillStyle = lettersColor;
+            ctx.save();
+            var lettres = ["A", "B", "C", "D"];
+            for (let i = 0; i < 4; i++) {
+                ctx.textAlign = "center";
+                ctx.fillText(lettres[i], canvas.width / 2, 65);
+                if (i === 0) {
+                    ctx.textAlign = "end";
+                    ctx.fillText(id, 670, 65);
+                }
+                if(i===1 && users.classe){
+                    let user = users.classe[id];
+                    if(user)user = user.slice(0,20)
+                    else user = ""
+                    ctx.textAlign = "end";
+                    ctx.font = "bold 20px sans-serif";
+                    ctx.fillText(user, 670, 65);
+                } else {
+                    ctx.font = "bold 38px sans-serif";
+                }
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate(Math.PI / 2);
+                ctx.translate(-canvas.width / 2, -canvas.height / 2);
+            }
+            ctx.restore();
+            document.getElementById("markercanvas").innerHTML = canvas;
+            var img = document.createElement("IMG");
+            img.src = canvas.toDataURL("image/png");
+            var pngcont = document.getElementById("png-container");
+            if (letsgo !== undefined) {
+                pngcont.appendChild(img);
+                pngcont.innerHTML += '<DIV STYLE="page-break-before:always"></DIV>';
+            } else {
+                while (pngcont.firstChild) {
+                    pngcont.removeChild(pngcont.firstChild);
+                }
+                pngcont.appendChild(img);
+            }
+        }
 
         </script>
         <div id="markercanvas" style="display: none;"></div>
