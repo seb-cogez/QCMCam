@@ -3,7 +3,7 @@
     <head>
         <meta charset='utf-8'>
         <script src="markers4x4.js" type="text/javascript"></script>
-        <title>Générateur de marqueur Aruko</title>
+        <title>Générateur de marqueurs Aruko 4 bits</title>
         <style>
             @media print
             {
@@ -18,15 +18,15 @@
         </style>
     </head>
     <body>
-        <h1 style="font-size:1.3em; text-align:center;" class="noprint"><img align="center" src="../css/img/QCMCam-logo.png" /> Générateur de marqueur Aruco 4 bits</h1>
+        <h1 style="font-size:1.3em; text-align:center;" class="noprint"><img align="center" src="../css/img/QCMCam-logo.png" /> Générateur de marqueurs Aruco 4 bits</h1>
         <div class="noprint">
             Numéro du marqueur à générer : 
             <input type="button" value="Générer marqueur n° :" onclick="genereMarker();">
             <input type="number" min="1" max="60" step="1" name="valeur" id="mid" style="width:3em;" value="1">
             <- de à -> <input type="number" min="2" max="60" step="1" name="valeurmax" id="maxid" style="width:3em;" value="2"><input type="button" value="Générer intervalle" onClick="generate();">
             Couleur des lettres : <input type="color" onchange="setColor(this.value);" defaultValue='#E0E0E0' id="colorsetter"><br />
-            <i style="font-size: 0.8em;">Changer le 1er numéro et cliquer sur Générer marqueur n° pour créer un seul marqueur. Changer les 2 numéros et cliquer sur Générer intervalle pour créer tous les marqueurs du 1er au 2e nombre.</i><br>
-            Pour créer des marqueurs nominatifs, importer, puis sélectionner la classe : <input type='file' id="file" accept='text/plain' onchange='users.openFile(event)' title="Charger les élèves depuis son ordinateur" class="inputfile" data-translate='{"title":"generator.users.import"}' /><select id="classes"><option value="0" title="Importer d'abord des classes pour  pouvoir générer des fichiers nomminatifs">Importer un fichier</option></select><br>
+            <i style="font-size: 0.8em;">Changer le 1er numéro et cliquer sur Générer marqueur n° pour générer un seul marqueur. Changer les 2 numéros et cliquer sur Générer intervalle pour générer tous les marqueurs du 1er au 2e nombre.</i><br>
+            Pour générer des marqueurs nominatifs, importer une classe : <input type='file' id="file" accept='text/plain' onchange='users.openFile(event)' title="Charger les élèves depuis son ordinateur" class="inputfile" data-translate='{"title":"generator.users.import"}' /><select id="classes" style="display: none;"><option value="0" title="Importer d'abord des classes pour pouvoir générer des fichiers nomminatifs">Importer un fichier</option></select><br>
             <div id="listeeleves"></div>
         </div>
         <script>
@@ -54,6 +54,11 @@
                         genereMarker(i, true);
                 }
             };
+
+            majBornes = function () {
+                document.getElementById("mid").value = 1
+                document.getElementById("maxid").value = users.college.uploaded.effectif
+            }
             
             var users = {
                 // supprMode : false ou true, selon que l'on est en mode suppression des utilisateurs par clic ou non
@@ -156,6 +161,8 @@
             var reader = new FileReader();
             reader.onload = function () {
                 users.import(reader.result);
+                majBornes();
+                generate();
             };
             reader.readAsText(input.files[0]);
             }
@@ -164,10 +171,7 @@
             document.getElementById("listeeleves").innerHTML = "";
             let selectedOption = document.getElementById("classes").value;
             users.classe = null;
-            if(users.college[selectedOption] !== undefined){
-                // une classe est sélectionnée.
-                users.classe = users.college[selectedOption];
-            }
+            if (users.college.uploaded) users.classe = users.college.uploaded;
             if (id === undefined)
                 id = Number(document.getElementById("mid").value);
             if (Number(id) > 90 || Number(id) <= 0) {
