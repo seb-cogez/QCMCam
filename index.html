@@ -58,7 +58,7 @@
     </div>
     <div id="commandesQuestions">
       <img id="btnadd" src="css/img/32px/if_bullet_add_66698.png" title="Ajouter une question (ALT X)" alt="ajouter question" onclick="QCMeditors.addQ();" data-translate='{"title":"questions.addquestion"}' />
-      <input type='file' id="file" accept='text/plain' onchange='QCMeditors.openFile(event)' title="Charger les questions depuis son ordinateur" class="inputfile" data-translate='{"title":"questions.loadquestions"}' />
+      <input type='file' id="file" accept='text/plain, .csv' onchange='QCMeditors.openFile(event)' title="Charger les questions depuis son ordinateur" class="inputfile" data-translate='{"title":"questions.loadquestions"}' />
       <label for="file" title="Charger les questions depuis son ordinateur" data-translate='{"title":"questions.loadquestions"}'><img onmouseover="utils.montrerPasteUrl(true);" src="css/img/32px/if_folder_upload_66809.png" title="Charger les questions depuis l'ordinateur" data-translate='{"title":"questions.loadquestions"}' /></label>
       <div id="pasteUrl" onmouseout="utils.montrerPasteUrl(false);" class="cache"><span data-translate='{"html":"questions.pasteurl"}'>ou adresse web</span> :<input type="texte" id="inputurl" placeholder="Coller ici" data-translate='{"placeholder":"questions.pastehere"}'></div>
       <img src="css/img/32px/if_folder_edit_66793.png" title="Plus d'options - ne pas utiliser si des évaluations ont été faites" onclick="utils.toggleOptions('editionQuestions');" id="btng" data-translate='{"title":"questions.togglequestionsptions"}' />
@@ -70,7 +70,7 @@
         <select name="classe" id="classes" onchange="users.setGroup(this.value);">
             <option value="nochoice" selected data-translate='{"html":"generalPanel.group"}'>Groupe</option>
           </select>
-          <input type='file' id="file2" accept='text/plain' onchange='users.openFile(event)' title="Charger les participants depuis son ordinateur" class="inputfile" data-translate='{"title":"generalPanel.usersload"}' />
+          <input type='file' id="file2" accept='text/plain, .csv' onchange='users.openFile(event)' title="Charger les participants depuis son ordinateur" class="inputfile" data-translate='{"title":"generalPanel.usersload"}' />
           <label for="file2" title="Charger les participants depuis l'ordinateur"><img src="css/img/32px/if_user_upload_66919.png" title="Charger les participants depuis l'ordinateur" data-translate='{"title":"generalPanel.usersload"}' /></label>
           <img id="btnop" src="css/img/32px/if_file_edit_66764.png" title="Editer la liste des participants" onclick="utils.toggleOptions('editionParticipants');" data-translate='{"title":"generalPanel.userstoggleedit"}' />
     </div>

@@ -20,7 +20,7 @@
     </div>
 <div id="commandesQuestions">
             <img id="btnadd" src="css/img/32px/if_bullet_add_66698.png" title="Ajouter une question (ALT X)" alt="ajouter question" onclick="QCMeditors.addQ();" data-translate='{"title":"questions.addquestion"}' />
-            <input type='file' id="file" accept='text/plain' onchange='QCMeditors.openFile(event)' title="Charger les questions depuis son ordinateur" class="inputfile" data-translate='{"title":"questions.loadquestions"}' />
+            <input type='file' id="file" accept='text/plain, .csv' onchange='QCMeditors.openFile(event)' title="Charger les questions depuis son ordinateur" class="inputfile" data-translate='{"title":"questions.loadquestions"}' />
             <label for="file" title="Charger les questions depuis son ordinateur" data-translate='{"title":"questions.loadquestions"}'><img onmouseover="utils.montrerPasteUrl(true);" src="css/img/32px/if_folder_upload_66809.png" title="Charger les questions depuis l'ordinateur" data-translate='{"title":"questions.loadquestions"}' /></label>
             <div id="pasteUrl" onmouseout="utils.montrerPasteUrl(false);" class="cache"><span data-translate="{'html':'questions.pasteurl'}">ou adresse web</span> :<input type="texte" id="inputurl" placeholder="Coller ici" data-translate="{'placeholder':'questions.pastehere'}"></div>
             <img src="css/img/32px/if_folder_edit_66793.png" title="Afficher sans éditeur" onclick="utils.toggleOptions(this, 'editionQuestions');" id="btng" data-translate='{"title":"questions.togglequestionsptions"}' />

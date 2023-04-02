@@ -26,7 +26,7 @@
             <- de à -> <input type="number" min="2" max="60" step="1" name="valeurmax" id="maxid" style="width:3em;" value="2"><input type="button" value="Générer intervalle" onClick="generate();">
             Couleur des lettres : <input type="color" onchange="setColor(this.value);" defaultValue='#E0E0E0' id="colorsetter"><br />
             <i style="font-size: 0.8em;">Changer le 1er numéro et cliquer sur Générer marqueur n° pour générer un seul marqueur. Changer les 2 numéros et cliquer sur Générer intervalle pour générer tous les marqueurs du 1er au 2e nombre.</i><br>
-            Pour générer des marqueurs nominatifs, importer une classe : <input type='file' id="file" accept='text/plain' onchange='users.openFile(event)' title="Charger les élèves depuis son ordinateur" class="inputfile" data-translate='{"title":"generator.users.import"}' /><select id="classes" style="display: none;"><option value="0" title="Importer d'abord des classes pour pouvoir générer des fichiers nomminatifs">Importer un fichier</option></select><br>
+            Pour générer des marqueurs nominatifs, importer une classe : <input type='file' id="file" accept='text/plain, .csv' onchange='users.openFile(event)' title="Charger les élèves depuis son ordinateur" class="inputfile" data-translate='{"title":"generator.users.import"}' /><select id="classes" style="display: none;"><option value="0" title="Importer d'abord des classes pour pouvoir générer des fichiers nomminatifs">Importer un fichier</option></select><br>
             <div id="listeeleves"></div>
         </div>
         <script>
