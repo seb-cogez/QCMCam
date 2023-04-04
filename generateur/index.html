@@ -183,14 +183,15 @@
             ctx.fillStyle = lettersColor;
             ctx.save();
             var lettres = ["A", "B", "C", "D"];
+            let positionIndice = Math.floor(Math.random() * 4);
             for (let i = 0; i < 4; i++) {
                 ctx.textAlign = "center";
                 ctx.fillText(lettres[i], canvas.width / 2, 65);
-                if (i === 0) {
+                if (i === positionIndice) {
                     ctx.textAlign = "end";
                     ctx.fillText(id, 670, 65);
                 }
-                if(i===1 && users.classe){
+                if(i === ((positionIndice + 1) % 4) && users.classe){
                     let user = users.classe[id];
                     if(user)user = user.slice(0,20)
                     else user = ""
