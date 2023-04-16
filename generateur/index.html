@@ -183,13 +183,13 @@
             [canvas, blancs] = makeMarker(tid, width, height);
             var ctx = canvas.getContext('2d');
             // style of the letters A, B, C and D
-            ctx.font = "bold 38px sans-serif";
             ctx.fillStyle = lettersColor;
             ctx.save();
             var lettres = ["A", "B", "C", "D"];
             let positionIndice = Math.floor(Math.random() * 4);
             for (let i = 0; i < 4; i++) {
                 ctx.textAlign = "center";
+                ctx.font = "bold 38px sans-serif";
                 ctx.fillText(lettres[i], canvas.width / 2, 65);
                 if (i === positionIndice) {
                     ctx.textAlign = "end";
@@ -202,8 +202,6 @@
                     ctx.textAlign = "end";
                     ctx.font = "bold 20px sans-serif";
                     ctx.fillText(user, 670, 65);
-                } else {
-                    ctx.font = "bold 38px sans-serif";
                 }
                 ctx.translate(canvas.width / 2, canvas.height / 2);
                 ctx.rotate(Math.PI / 2);
