@@ -1,10 +1,8 @@
-html {
-  min-height: 100%;
-}
 body{
     font-family: Arial,sans-serif;
     font-size: 20px;
-    height: 100%;
+    height: 100vh;
+    overflow: hidden;
 }
 .cache {
     display: none;
@@ -48,9 +46,12 @@ body{
     background-color: #ccc;
 }
 #contenerApp {
-    position:relative;
-    height:90%;
-    padding:0px 30px;
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:48px;
+    padding:0px 1vw;
 }
 #messageacceuil.flex {
     display: flex;
@@ -128,7 +129,7 @@ div.eleve, div.eleveevident{
     display: inline-block;
     text-align: left;
     font-size: 0.8em;
-    padding:9px 2px;
+    padding:6px 2px 2px;
     vertical-align: top;
 }
 div.eleveevident{
@@ -149,6 +150,7 @@ div.eleveevident > span:last-child {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    background: rgba(0, 0, 0, 0.19);
 }
 span.numero, span.numerovert, span.numerorouge, span.numerobleu{
     display: inline-block;
@@ -222,6 +224,9 @@ span.supprButton{
     margin-top:15px;
     background-color: rgba(255,255,255,0.75);
 }
+#questions:not(.content-editable) {
+  height: calc(55vh - 109px);
+}
 #cacheQuestions.montre {
     position:absolute;
     background: lightgrey;
@@ -248,10 +253,6 @@ span.supprButton{
     height:100%;
     float: left;
     border: 1px solid #CCC;
-}
-.question.multiple::before {
-  content: url(./img/multicheck.png);
-  float: right;
 }
 #questionsContener{
     overflow: hidden;
@@ -286,11 +287,21 @@ span.supprButton{
     visibility: hidden;
 }
 #conteneureleves {
-    padding-top:16px;
-    margin-top:30px;
+    padding-top:0;
+    margin: top 0;
     text-align:left;
     overflow: hidden;
     background-color: rgba(255,255,255,0.65);
+}
+#surcouche {
+    position: absolute;
+    z-index: 0;
+    top:1vh;
+  right: 1vw;
+}
+#listeeleves {
+    position: relative;
+    z-index: 1;
 }
 .western{
     line-height:150%;
@@ -329,7 +340,7 @@ span.supprButton{
 #commandesPrincipalesUsers, #commandesCamera{
     display: inline-block;
 }
-#logo, #panneauHautDroite, #commandesQuestions{
+#logo, #panneauHautDroite{
     position: absolute;
     display: block;
     background: rgb(255, 255, 255);
@@ -338,6 +349,14 @@ span.supprButton{
     border-bottom:1px solid black;
     border-radius: 0 0 6px 6px;
 }
+#commandesQuestions {
+    position: absolute;
+    display: block;
+    background: rgb(255, 255, 255);
+    border:1px solid black;
+    border-radius: 6px;
+}
+
 #logo{
     padding:0 4px 2px;
 }
@@ -345,7 +364,13 @@ span.supprButton{
     padding: 4px 6px 3px 6px;
 }
 #commandesQuestions{
-    right:calc(50% + 100px);
+    left:50%;
+    translate: -50%;
+}
+#zoom {
+    position:absolute;
+    left:50%;
+    translate: -140px;
 }
 #panneauHautDroite{
     left:calc(50% + 100px);
@@ -369,9 +394,8 @@ span.supprButton{
     box-shadow: 1px 2px 5px 1px rgba(0, 0, 0, 0.7);
 }
 #navigation{
-    top:15px;
-    left:50%;
-    transform: translate(-50%);
+    top:0;
+    left:2vw;
     background: #eeeeee;
 }
 #navigation.cache, #editionParticipants.cache, #editionQuestions.cache{
@@ -444,9 +468,9 @@ span.supprButton{
 }
 #footersmartphone {
   padding: 5px;
-  position:fixed;
+  position:absolute;
   bottom:0;
-  right:175px;
+  right:160px;
   display:block;
   border-radius: 10px 10px 0 0;
   box-shadow: 1px 2px 5px 1px rgba(0, 0, 0, 0.7);
@@ -457,7 +481,7 @@ span.supprButton{
 }
 #espacelangue{
   padding:3px;
-  position:fixed;
+  position:absolute;
   bottom:0;
   right:0;
   display:block;
@@ -498,15 +522,59 @@ span.supprButton{
 #tableau th {
     cursor: pointer;
 }
-/* hors tableau */
-.question > ol {
+ol {
     counter-reset: li;
+    visibility: visible;
 }
-.question > ol > li {
+.question[contenteditable=true] ol {
+    visibility: visible;
+}
+ol.invisible {
+    visibility: hidden;
+}
+.question:not([contenteditable=true]) ol {
+    position: absolute;
+    bottom: 0;
+    display: grid;
+    grid-template-areas: '. .' '. .';
+    gap: 1vw;
+    left: 1vw;
+    right: 1vw;
+    padding-top: 1vh;
+    z-index:10;
+}
+ol > li {
     list-style-type: none;
     margin-bottom: 16px;
 }
-.question > ol > li::before {
+.question:not([contenteditable=true]) ol > li {
+    width: 42vw;
+    height: 13vh;
+    border-radius: 1vw;
+    text-align: center;
+    font-size: 3vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+}
+.question:not([contenteditable=true]) ol > li:nth-of-type(1){
+    border: 1vw #f2bb68 solid;
+    background-color: #f2bb68;
+}
+.question:not([contenteditable=true]) ol > li:nth-of-type(2){
+    border: 1vw #86f268 solid;
+    background-color: #86f268;
+}
+.question:not([contenteditable=true]) ol > li:nth-of-type(3){
+    border: 1vw #68d4f2 solid;
+    background-color: #68d4f2;
+}
+.question:not([contenteditable=true]) ol > li:nth-of-type(4){
+    border: 1vw #a668f2 solid;
+    background-color: #a668f2;
+}
+ol > li::before {
     display: inline-block;
     counter-increment: li;
     content: counter(li, upper-alpha) ". ";
@@ -515,29 +583,9 @@ span.supprButton{
     cursor: pointer;
     font-weight: bold;
 }
-/* dans tableau */
-table {
-  counter-reset: li;
-}
-table ol {
-  padding:20px;
-}
-table li {
-  list-style-type: none;
-  margin-bottom: 16px;
-}
-table li::before {
-  display: inline-block;
-  counter-increment: li;
-  content: counter(li, upper-alpha) ". ";
-  padding: 4px;
-  margin-right: 3px;
-  cursor: pointer;
-  font-weight: bold;
-}
-.cke_editable .rondvert::before, .corrige .rondvert::before{
-  border-radius:20px 20px 20px 20px;
-  border:3px solid green;
+.question:not([contenteditable=true]) ol > li.correct {
+    border-radius: 4vw 4vw 4vw 4vw;
+    border: 1vw solid red;
 }
 #progressdiv {
   position:absolute;
@@ -678,8 +726,8 @@ table li::before {
   }
   @media screen and (max-width:1024px){
     #boutonsuserslive{
-        max-width: 144px;
-        margin-top: -16px;
+        max-width: 30vw;
+        margin-top: 0;
     }
     #divVideo {
       top:38px;
@@ -687,7 +735,7 @@ table li::before {
   body {
     font-size: 16px;
   }
-  #commandes img, #commandesQuestions img, #panneauHautDroite img, #cameras-list img, #boutonsuserslive img{
+  #commandes img, #commandesQuestions img, #panneauHautDroite img, #cameras-list img, #boutonsuserslive img, #navigation img {
     height: 24px;
   }
   #logo img {
