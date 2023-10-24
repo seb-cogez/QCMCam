@@ -217,6 +217,17 @@ var utils = {
         } else if(arguments[0] === false){
             document.getElementById('indication').className = "cache";
         }
+    },
+    afficheStartScan:function(){
+        const content = document.getElementById('affichage');
+        const can = document.createElement('div')
+        can.style['text-align']= 'center'
+        can.innerHTML = `Démarrer la caméra<br><img src="img/play-circle-line.svg" width="200">`
+        content.prepend(can)
+        can.onclick = () => {
+            camera.demarrerCamera()
+            content.removeChild(can)
+        }
     }
 };
 var camera = {
@@ -242,9 +253,8 @@ var camera = {
             if(camera.selectedSource === null){
                 camera.selectedSource = 0;
                 for(var i=0;i<camera.videoSources.length;i++){
-                    //console.log(camera.videoSources[i]);
                     // on regarde si dans le label est indiqué le mot back ou l'orientation
-                    if(camera.videoSources[i][1].indexOf("back")>-1 || camera.videoSources[i][1].indexOf("90")>-1 || camera.videoSources[i][1].indexOf("arrière")>-1){
+                    if(camera.videoSources[i][1].indexOf("back")>-1 || camera.videoSources[i][1].indexOf("90")>-1 || camera.videoSources[i][1].indexOf("arrière")>-1|| camera.videoSources[i][1].indexOf("environ")>-1){
                         camera.selectedSource = i;
                     }
                 }
@@ -399,57 +409,65 @@ var camera = {
     tick:function() {
         var ok = false;
         if(camera.videoPause) return;
-        if (video.readyState > 2) {
-            if ((camera.videoReady === false && camera.video.videoWidth > 0) || affichage.canvas.width !== parseInt(camera.video.videoWidth)) {
-                camera.videoReady = true;
-                affichage.canvas.width = parseInt(camera.video.videoWidth);
-                affichage.canvas.height = parseInt(camera.video.videoHeight);
-                affichage.canvas.style.width = "98%";
-                affichage.canvas.style.height = "auto";
-                affichage.context.font = Math.round(affichage.canvas.width/20)+"px Arial";
-                affichage.context.textAlign = "center";
-                //affichage.debug("videoW : " + video.videoWidth + " videoH : " + video.videoHeight);
+        try {
+            if (video.readyState > 2) {
+                if ((camera.videoReady === false && camera.video.videoWidth > 0) || affichage.canvas.width !== parseInt(camera.video.videoWidth)) {
+                    camera.videoReady = true;
+                    affichage.canvas.width = parseInt(camera.video.videoWidth);
+                    affichage.canvas.height = parseInt(camera.video.videoHeight);
+                    affichage.canvas.style.width = "98%";
+                    affichage.canvas.style.height = "auto";
+                    affichage.context.font = Math.round(affichage.canvas.width/20)+"px Arial";
+                    affichage.context.textAlign = "center";
+                    //affichage.debug("videoW : " + video.videoWidth + " videoH : " + video.videoHeight);
+                }
+                if (affichage.canvas.width > 0) {
+                    // copie l'image venant de la caméra dans le canvas d'affichage.
+                    camera.clearImage();
+                    if(camera.detectQRCode){
+                        var w = affichage.canvas.width, h = affichage.canvas.height, taille = 200;
+                        if(w>=800 || h>=800){
+                            taille = 400;
+                        }
+                        var w1 = Math.round(w/2-taille/2), h1 = Math.round(h/2-taille/2), 
+                        w2 = Math.round(w/2+taille/2), h2 = Math.round(h/2+taille/2);
+                        affichage.context.drawImage(camera.video,w1,h1,taille,taille,w1,h1,taille,taille);
+                        affichage.context.fillStyle = "red";
+                        affichage.context.fillRect(w1-10, h1-10, 30, 3);
+                        affichage.context.fillRect(w1-10, h1-10, 3, 30);
+                        affichage.context.fillRect(w2-20, h1-10, 30, 3);
+                        affichage.context.fillRect(w2+7, h1-10, 3, 30);
+                        affichage.context.fillRect(w1-10, h2-20, 3,30);
+                        affichage.context.fillRect(w1-10, h2+7, 30,3);
+                        affichage.context.fillRect(w2-20,h2+7, 30,3);
+                        affichage.context.fillRect(w2+7,h2-20,3,30);
+                    } else
+                    affichage.context.drawImage(camera.video, 0, 0, affichage.canvas.width, affichage.canvas.height);
+                    ok = true;
+                }
             }
-            if (affichage.canvas.width > 0) {
-                // copie l'image venant de la caméra dans le canvas d'affichage.
-                camera.clearImage();
-                if(camera.detectQRCode){
-                    var w = affichage.canvas.width, h = affichage.canvas.height, taille = 200;
-                    if(w>=800 || h>=800){
-                        taille = 400;
-                    }
-                    var w1 = Math.round(w/2-taille/2), h1 = Math.round(h/2-taille/2), 
-                    w2 = Math.round(w/2+taille/2), h2 = Math.round(h/2+taille/2);
-                    affichage.context.drawImage(camera.video,w1,h1,taille,taille,w1,h1,taille,taille);
-                    affichage.context.fillStyle = "red";
-                    affichage.context.fillRect(w1-10, h1-10, 30, 3);
-                    affichage.context.fillRect(w1-10, h1-10, 3, 30);
-                    affichage.context.fillRect(w2-20, h1-10, 30, 3);
-                    affichage.context.fillRect(w2+7, h1-10, 3, 30);
-                    affichage.context.fillRect(w1-10, h2-20, 3,30);
-                    affichage.context.fillRect(w1-10, h2+7, 30,3);
-                    affichage.context.fillRect(w2-20,h2+7, 30,3);
-                    affichage.context.fillRect(w2+7,h2-20,3,30);
-                } else
-                affichage.context.drawImage(camera.video, 0, 0, affichage.canvas.width, affichage.canvas.height);
-                ok = true;
-            }
+        } catch(error){
+            console.error('Erreur de détection avec image', error)
         }
-        if(camera.detectQRCode && ok){
-            document.getElementById('indication').innerHTML = "Scanner le QRCode";
-            var imageData = affichage.context.getImageData(0, 0, affichage.canvas.width, affichage.canvas.height);
-            if(QRCode.detectQRCode(imageData)){
-                // on indique qu'on a eu le QRCode et que la communication est lancée avec l'autre appareil
-                camera.detectQRCode = false;
-                // on arrête l'image
-                camera.videoPause = true;
+        try{
+            if(camera.detectQRCode && ok){
+                document.getElementById('indication').innerHTML = "Scanner le QRCode";
+                var imageData = affichage.context.getImageData(0, 0, affichage.canvas.width, affichage.canvas.height);
+                if(QRCode.detectQRCode(imageData)){
+                    // on indique qu'on a eu le QRCode et que la communication est lancée avec l'autre appareil
+                    camera.detectQRCode = false;
+                    // on arrête l'image
+                    camera.videoPause = true;
+                }
+            } else if (camera.videoPause === false && ok) {
+                utils.indiquer(false);
+                var imageData = affichage.context.getImageData(0, 0, affichage.canvas.width, affichage.canvas.height);
+                var markers = camera.detector.detect(imageData);
+                camera.drawMarkers(markers);
+                affichage.updateVotes();
             }
-        } else if (camera.videoPause === false && ok) {
-            utils.indiquer(false);
-            var imageData = affichage.context.getImageData(0, 0, affichage.canvas.width, affichage.canvas.height);
-            var markers = camera.detector.detect(imageData);
-            camera.drawMarkers(markers);
-            affichage.updateVotes();
+        } catch(error){
+            console.error('Erreur détection qrcode ou marqueurs',error)
         }
         //requestAnimationFrame(camera.tick);
         setTimeout(camera.tick, 100);
@@ -460,38 +478,42 @@ var camera = {
         affichage.context.textAlign = "center";
         affichage.context.textBaseline = "middle";
         var x,y,xmax,ymax;
-        for (i = 0; i !== markers.length; ++i) {
-            // on commence par affecter la réponse à l'utilisateur
-            q.affecte(corres[markers[i].id], camera.derterminateResponse(markers[i].corners));
-            x = Infinity;
-            y = Infinity;
-            xmax = -Infinity;
-            ymax = -Infinity;
-            corners = markers[i].corners;
-            affichage.context.beginPath();
-            affichage.context.moveTo(corners[0].x, corners[0].y);
-            affichage.context.lineWidth = 3;
-            affichage.context.fillStyle = "rgba(0,0,5,0.6)";
-            for (j = 0; j < 4; j++) {
-                corner = corners[(j + 1) % 4];
-                affichage.context.lineTo(corner.x, corner.y);
-                x = Math.min(x, corner.x);
-                y = Math.min(y, corner.y);
-                xmax = Math.max(xmax, corner.x);
-                ymax = Math.max(ymax, corner.y);
+        try{
+            for (i = 0; i !== markers.length; ++i) {
+                // on commence par affecter la réponse à l'utilisateur
+                q.affecte(corres[markers[i].id], camera.derterminateResponse(markers[i].corners));
+                x = Infinity;
+                y = Infinity;
+                xmax = -Infinity;
+                ymax = -Infinity;
+                corners = markers[i].corners;
+                affichage.context.beginPath();
+                affichage.context.moveTo(corners[0].x, corners[0].y);
+                affichage.context.lineWidth = 3;
+                affichage.context.fillStyle = "rgba(0,0,5,0.6)";
+                for (j = 0; j < 4; j++) {
+                    corner = corners[(j + 1) % 4];
+                    affichage.context.lineTo(corner.x, corner.y);
+                    x = Math.min(x, corner.x);
+                    y = Math.min(y, corner.y);
+                    xmax = Math.max(xmax, corner.x);
+                    ymax = Math.max(ymax, corner.y);
+                }
+                affichage.context.closePath();
+                affichage.context.stroke();
+                affichage.context.fill();
+                // id du marker
+                affichage.context.fillStyle = "white";
+                affichage.context.lineWidth = 1;
+                affichage.context.font = Math.max((ymax - y) / 2) + "px Arial"; // defaut : 25 px
+                if (corres[markers[i].id] !== undefined)
+                    affichage.context.fillText(corres[markers[i].id], (x + xmax) / 2, (y + ymax) / 2);
+                else
+                    affichage.context.fillText("# " + markers[i].id + " #", (x + xmax) / 2, (y + ymax) / 2);
             }
-            affichage.context.closePath();
-            affichage.context.stroke();
-            affichage.context.fill();
-            // id du marker
-            affichage.context.fillStyle = "white";
-            affichage.context.lineWidth = 1;
-            affichage.context.font = Math.max((ymax - y) / 2) + "px Arial"; // defaut : 25 px
-            if (corres[markers[i].id] !== undefined)
-                affichage.context.fillText(corres[markers[i].id], (x + xmax) / 2, (y + ymax) / 2);
-            else
-                affichage.context.fillText("# " + markers[i].id + " #", (x + xmax) / 2, (y + ymax) / 2);
-        }
+        }catch(error){
+            console.log('Erreur de dessin des marqueurs', error)
+      }
     },
     /*
     * stoppe ou démarre la reconnaissance des marqueurs de vote
@@ -1119,7 +1141,9 @@ function onLoad() {
     affichage.context = affichage.canvas.getContext("2d");
     setTimeout(utils.lancerReveal, 1000);
     //affichage.debug("Pas de session lancée depuis l'ordinateur. L'application ne peut pas fonctionner");
-    setTimeout(camera.demarrerCamera, 800);
+    // Sur iOS, la camera ne démarrera pas seule. Il faut le faire faire par l'utilisateur...
+    //setTimeout(camera.demarrerCamera, 800);
+    utils.afficheStartScan()
 };
 
 var QRCode = {

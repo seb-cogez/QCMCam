@@ -26,25 +26,19 @@
   <script src="js/polyfill.js"></script><!-- request animation frame sur les anciens navigateurs -->
   <script src="js/aruco.min.js"></script>
   <script src="js/cv.min.js"></script>
-  <script src="js/detector-dispositif.min.js?v=2"></script>
+  <script src="js/detector-dispositif.min.js?v=7"></script>
   <script src="js/jsQR.min.js"></script>
   <script src="js/peer.min.js" defer></script>
   <script src="js/fullscreen.js" defer></script>
   <script>
-    // This is the service worker with the Cache-first network
-    // A décommenter avant mise en prod
-    // Check compatibility for the browser we're running this in
-    /*if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('app/service_worker_main.js').then(function (registration) {
-        // Registration was successful
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      }).catch(function (err) {
-        // registration failed :(
-        console.log('ServiceWorker registration failed: ', err);
-      });
-    }*/
+    // taper ?eruda=true dans l'url pour activer le debugger
+    (function () {
+    var src = '//cdn.jsdelivr.net/npm/eruda';
+    if (!/eruda=true/.test(window.location) && localStorage.getItem('active-eruda') != 'true') return;
+    document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+    document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');
+})();
   </script>
-  <!--<script src="app/service_worker_main.min.js"></script>-->
 </head>
 <body>
   <div
@@ -57,7 +51,7 @@
   </div>
   <div id="infobox"></div>
   <div id="divVideo">
-    <video id="video" autoplay muted playsinline style="width:10px;height:10px"></video>
+    <video id="video" autoplay muted playsinline style="width:10px;height:10px;display: none;"></video>
     <canvas id="surcouche" height="0"></canvas>
   </div>
   <div id="wrapper">
@@ -101,7 +95,7 @@
       </div>
       <div>
         <img id="bti" alt="Interroger quelqu'un" src="img/128px/if_user_search_66914.png"
-          onclick="affichage.debug('plouf');affichage.optionsInterroger();" />
+          onclick="affichage.optionsInterroger();" />
       </div>
       <div id="divchangecam" class="cache">
         <img id="btn4" alt="Changement de caméra" src="img/128px/gnome-session-switch.png"

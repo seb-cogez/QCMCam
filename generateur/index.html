@@ -57,7 +57,12 @@
 
             majBornes = function () {
                 document.getElementById("mid").value = 1
-                document.getElementById("maxid").value = users.college.uploaded.effectif
+                const max = document.getElementById("maxid")
+                if(document.getElementById('classes').selectedIndex > 0){
+                    max.value = users.college[document.getElementById('classes').value].effectif
+                } else {
+                    max.value = 30
+                }
             }
             
             var users = {
@@ -127,6 +132,7 @@
         var x = document.getElementById("classes"),
             option, nomClasse;
         var opts = x.getElementsByTagName('option');
+        x.style['display'] = 'block'
         // on vide le select
         while (opts[0]) {
             x.removeChild(opts[0]);
@@ -172,6 +178,9 @@
             let selectedOption = document.getElementById("classes").value;
             users.classe = null;
             if (users.college.uploaded) users.classe = users.college.uploaded;
+            if(document.getElementById('classes').selectedIndex > 0){
+                users.classe = users.college[document.getElementById('classes').value]
+            }
             if (id === undefined)
                 id = Number(document.getElementById("mid").value);
             if (Number(id) > 90 || Number(id) <= 0) {
